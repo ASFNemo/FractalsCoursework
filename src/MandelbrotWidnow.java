@@ -5,18 +5,19 @@ import java.awt.*;
  */
 public class MandelbrotWidnow extends Canvas {
 
-    boolean toDraw;
-
     int size;
     int iterationsToComplete;
-    int iterationsCompleted;
-
-    ComplexNumbers complexNumberSet;
+//    int iterationsCompleted;
+//
+//    ComplexNumbers complexNumberSet;
 
     double xMax;
     double yMin;
     double xMin;
     double yMax;
+
+    double fractalX;
+    double fractalY;
 
     public MandelbrotWidnow() {
         //toDraw = false;
@@ -34,18 +35,22 @@ public class MandelbrotWidnow extends Canvas {
         //double xStep = (xMin * xMax) / size;
         //double yStep = (yMax * yMin) / size;
 
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                //complexNumberSet[i][j] = new ComplexNumbers(2*xMin*i/size +xMax, 2*yMax*j/size +yMin);
-
-                complexNumberSet = getComplexNumber(i, j);
-            }
-        }
+//        for (int i = 0; i < size; i++) {
+//            for (int j = 0; j < size; j++) {
+//                //complexNumberSet[i][j] = new ComplexNumbers(2*xMin*i/size +xMax, 2*yMax*j/size +yMin);
+//
+//                complexNumberSet = getComplexNumber(i, j);
+//            }
+ //       }
     }
 
     public void paint(Graphics g) {
         System.out.println("I am painting");
         //if (toDraw) {
+
+        if (getIterationsToComplete() > 10000){
+            System.out.println("this is fucking huge");
+        }
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
                      //int totalIterations = amountOfIterations(complexNumberSet[i][j]); // convert the pixel to a complex number!!!
@@ -65,10 +70,13 @@ public class MandelbrotWidnow extends Canvas {
 
                     double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
                     int totalIterations = (int) infoArray[1];
-                    g.setColor((totalIterations == iterationsToComplete) ? Color.BLACK : new Color(180, (totalIterations*2)%254, 0)); // change this to do the colors more simply
+                    g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180, (totalIterations*2)%254, 0)); // change this to do the colors more simply
 //                    g.setColor(new Color(Math.round(2*(totalIterations+1)/225), Math.round(2*(totalIterations+1)/225),
 //                    Math.round(2*(totalIterations+1)/225)));
 
+                    if (i == 343 && j==174){
+                        System.out.println(" real: " + getY(i) + "Complex" + getX(j));
+                    }
 
 //                    g.setColor(new Color(
 //                            (new Random()).nextInt(255),
@@ -82,21 +90,21 @@ public class MandelbrotWidnow extends Canvas {
         //}
     }
 
-//    protected ComplexNumbers amountOfIterations(ComplexNumbers complexNumber) {
+//    protected ComplexNumbers amountOfIterations(ComplexNumbers complexNumberPassedIn) {
 //        ComplexNumbers cNumber = new ComplexNumbers();
 //        int totalIterations = 0;
 //        while ((totalIterations < iterationsToComplete) && cNumber.modulusSquared() < 4) {
 //            totalIterations++;
 //
 //            //System.out.println("foo");
-//            //cNumber = cNumber.multiply(cNumber).add(complexNumber);
+//            //cNumber = cNumber.multiply(cNumber).add(complexNumberPassedIn);
 //
 //            cNumber.square();
-//            cNumber.add(complexNumber);
+//            cNumber.add(complexNumberPassedIn);
 //
 //            if (totalIterations % 10 == 0) {
 //
-//                System.out.println("real: " + complexNumber.getReal() + " complex: " + complexNumber.getComplex()
+//                System.out.println("real: " + complexNumberPassedIn.getReal() + " complex: " + complexNumberPassedIn.getComplex()
 //                        + " Total iterations: " + totalIterations + " magnitude: " + cNumber.modulusSquared());
 //            }
 //        }
@@ -111,18 +119,18 @@ public class MandelbrotWidnow extends Canvas {
         ComplexNumbers cNumber = new ComplexNumbers();
         double totalIterations = 0;
         double[] infoArray = new  double[2];
-        while ((totalIterations < iterationsToComplete) && cNumber.modulusSquared() < 4) {
+        while ((totalIterations < getIterationsToComplete()) && cNumber.modulusSquared() < 4) {
             totalIterations++;
 
             //System.out.println("foo");
-            //cNumber = cNumber.multiply(cNumber).add(complexNumber);
+            //cNumber = cNumber.multiply(cNumber).add(complexNumberPassedIn);
 
             cNumber.square();
             cNumber.add(complexNumber);
 
             if (totalIterations % 10 == 0) {
 
-//                System.out.println("real: " + complexNumber.getReal() + " complex: " + complexNumber.getComplex()
+//                System.out.println("real: " + complexNumberPassedIn.getReal() + " complex: " + complexNumberPassedIn.getComplex()
 //                        + " Total iterations: " + totalIterations + " magnitude: " + cNumber.modulusSquared());
             }
         }
@@ -137,28 +145,52 @@ public class MandelbrotWidnow extends Canvas {
 
 
 
-    public void draw() {
-        toDraw = true;
-    }
-
     public void setIterationsToComplete(int iterationsToComplete) {
         this.iterationsToComplete = iterationsToComplete;
+    }
+    public int getIterationsToComplete() {
+        return iterationsToComplete;
     }
 
     public double getY(double realY){
         double y = (((double) realY)/(this.getHeight()));
         y = y * (yMax - yMin);
         y = y + yMin;
-
+        //setFractalY(y);
         return y;
         //return (3.2*realY)/size;
     }
 
+    public double getdY(double realY){
+        double y = (((double) realY)/(600));
+        y = y * (yMax - yMin);
+        y = y + yMin;
+        //setFractalY(y);
+        return y;
+        //return (3.2*realY)/size;
+    }
+
+
     public double getX(double realX){
 
-        double x = (((double) realX)/(this.getWidth()));
+        double x = (realX)/(this.getWidth());
         x = x * (xMax - xMin);
         x = x + xMin;
+
+        //setFractalX(x);
+
+        return x;
+        //return (4*realX)/size;
+    }
+
+
+    public double getdX(double realX){
+
+        double x = (realX)/(600);
+        x = x * (xMax - xMin);
+        x = x + xMin;
+
+        //setFractalX(x);
 
         return x;
         //return (4*realX)/size;
@@ -174,4 +206,22 @@ public class MandelbrotWidnow extends Canvas {
         return new ComplexNumbers(realNum, complexNum);
 
     }
+
+    public double getFractalX() {
+        return fractalX;
+    }
+
+    public void setFractalX(double fractalX) {
+        this.fractalX = fractalX;
+    }
+
+    public double getFractalY() {
+        return fractalY;
+    }
+
+    public void setFractalY(double fractalY) {
+        this.fractalY = fractalY;
+    }
+
+
 }

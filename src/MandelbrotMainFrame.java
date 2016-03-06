@@ -29,17 +29,18 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     JLabel yPosition;
     JTextField yPosInput;
 
-
+    JLabel CNtext;
+    JLabel CNLabel;
 
     JButton startButton;
 
     public MandelbrotMainFrame(){
         super();
         addItem();
-        setSize(1000, 800);
+        setSize(600, 800);
         mandelbrotWindow = new MandelbrotWidnow();
-        this.add(mandelbrotWindow);
-        this.add(new MandelbrotWidnow());
+        //this.add(mandelbrotWindow);
+        //this.add(new MandelbrotWidnow());
         setResizable(false);
 
 
@@ -55,24 +56,44 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
 
         iterationsText =  new JLabel("Amount of iterations: ");
-        inputIterations = new JTextField("100", 30);
+        inputIterations = new JTextField("" + mandelbrotWindow.getIterationsToComplete(), 30);
 
         xPosition = new JLabel("X position: ");
-        xPosInput = new JTextField();
+        xPosInput = new JTextField("0", 30);
+        xPosInput.setText("" + mandelbrotWindow.getFractalY());
 
-        startButton = new JButton("Start Mandelbrot");
-        //startButton.addActionListener(this);
-        mandelbrotWindow.draw();
-        mandelbrotWindow.repaint();
+        yPosition = new JLabel("Y position");
+        yPosInput = new JTextField("0", 30);
+        yPosInput.setText("" + mandelbrotWindow.getFractalY());
+
+        CNtext = new JLabel("This Complex Number:");
+        CNLabel = new JLabel("0 + 0i");
+
+        startButton = new JButton("Redraw Mandelbrot");
+        startButton.addActionListener(this);
+        //mandelbrotWindow.repaint();
 
         container.add(mandelbrotWindow);
         container.add(startButton);
         container.add(iterationsText);
         container.add(inputIterations);
-        mandelbrotWindow.setBounds(0, 0, 600, 600);// change the different boundas to try things out. also try a layout manager
-        iterationsText.setBounds(25, 610, 150, 30);
-        inputIterations.setBounds(165, 610, 100, 30);
-        startButton.setBounds(450, 610, 150, 50);
+        container.add(xPosition);
+        container.add(xPosInput);
+        container.add(yPosition);
+        container.add(yPosInput);
+        container.add(CNtext);
+        container.add(CNLabel);
+
+        mandelbrotWindow.setBounds(0, 0, 600, 600);
+        iterationsText.setBounds(15, 600, 150, 30);
+        inputIterations.setBounds(180, 600, 180, 30);
+        xPosition.setBounds(15, 630, 150, 30);
+        xPosInput.setBounds(180, 630, 180, 30);
+        yPosition.setBounds(15, 660, 150, 30);
+        yPosInput.setBounds(180, 660, 180, 30);
+        CNtext.setBounds(15, 690, 150, 30);
+        CNLabel.setBounds(183, 690, 400, 30);
+        startButton.setBounds(5, 730, 230, 30);
 
     }
 
@@ -80,7 +101,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == startButton){
             //mandelbrotWindow.draw();
-            mandelbrotWindow.repaint();
+            mandelbrotWindow.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
+            //System.out.println(mandelbrotWindow.getIterationsToComplete());
+            //mandelbrotWindow.repaint();
         }
     }
 
@@ -91,6 +114,23 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
                  */
         System.out.println(" the mouse was clicked at: " + e.getX() + "," + e.getY());
 
+        double x = mandelbrotWindow.getdX(e.getX());
+        double y = mandelbrotWindow.getdY(e.getY());
+
+        ComplexNumbers cn = new ComplexNumbers(x, y);
+
+        xPosInput.setText("" + x);
+        yPosInput.setText("" + y);
+
+        // if we need to return the value of the complex number simply reverse engineer the getx and get y methods in madelbrot window.
+        //xPosInput.setText("" + e.getX());
+        //yPosInput.setText("" + e.getY());
+
+        // input the getReal and getImaginary with an i after the getImaginary.
+        CNLabel.setText(cn.getReal() + " + " + y + "i");
+
+        JuliaMainFrame jmf = new JuliaMainFrame(new ComplexNumbers(x, y), x, y);
+        jmf.setVisible(true);
     }
 
     @Override
