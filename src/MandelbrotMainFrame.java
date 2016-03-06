@@ -129,7 +129,8 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         // input the getReal and getImaginary with an i after the getImaginary.
         CNLabel.setText(cn.getReal() + " + " + y + "i");
 
-        JuliaMainFrame jmf = new JuliaMainFrame(new ComplexNumbers(x, y), x, y);
+        //JuliaMainFrame jmf = new JuliaMainFrame(new ComplexNumbers(x, y), x, y);
+        JuliaMainFrame jmf= new JuliaMainFrame();
         jmf.setVisible(true);
     }
 
