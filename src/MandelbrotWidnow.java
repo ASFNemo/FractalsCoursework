@@ -1,9 +1,10 @@
+import javax.swing.*;
 import java.awt.*;
 
 /**
  * Created by asherfischbaum on 02/03/2016.
  */
-public class MandelbrotWidnow extends Canvas {
+public class MandelbrotWidnow extends JPanel {
 
     int size;
     int iterationsToComplete;
@@ -45,6 +46,7 @@ public class MandelbrotWidnow extends Canvas {
     }
 
     public void paint(Graphics g) {
+        super.paint(g);
         System.out.println("I am painting");
         //if (toDraw) {
 

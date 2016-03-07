@@ -40,7 +40,7 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
         frameItem();
     }
 
-    public JuliaMainFrame(){
+    public JuliaMainFrame(double x, double y){
         super();
 
         setSize(400, 600);
@@ -50,7 +50,7 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
 
         //juliaWindow = new JuliaWindow(complexNumber, x, y);
 
-        juliaWindow = new JuliaWindow();
+        juliaWindow = new JuliaWindow(x, y);
 
         //this.add(mandelbrotWindow);
         //this.add(new MandelbrotWidnow());

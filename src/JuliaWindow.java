@@ -2,6 +2,8 @@ import java.awt.*;
 
 public class JuliaWindow extends Canvas{
 
+    String juliaName;
+
     int size;
     int iterationsToComplete;
 
@@ -10,7 +12,10 @@ public class JuliaWindow extends Canvas{
     double xMin;
     double yMax;
 
-    public JuliaWindow(){
+    double mandelbrotx;
+    double mandelbrotY;
+
+    public JuliaWindow(double x, double y){
         size = 600;
         iterationsToComplete = 500;
 
@@ -18,7 +23,26 @@ public class JuliaWindow extends Canvas{
         yMin = -1.6;
         xMin = -2;
         yMax = 1.6;
+
+        mandelbrotx = x;
+        mandelbrotY = y;
     }
+
+    public JuliaWindow(String jName, double x, double y){
+        size = 600;
+        iterationsToComplete = 500;
+
+        xMax = 2;
+        yMin = -1.6;
+        xMin = -2;
+        yMax = 1.6;
+
+        mandelbrotx = x;
+        mandelbrotY = y;
+
+        juliaName = jName;
+    }
+
 
     public void paint(Graphics g){
         System.out.println("I am painting");
@@ -37,7 +61,7 @@ public class JuliaWindow extends Canvas{
     }
 
     protected double[] amountOfIterations(ComplexNumbers complexNumber){
-        ComplexNumbers DCN = new ComplexNumbers(0.5, 0.5);
+        ComplexNumbers DCN = new ComplexNumbers(mandelbrotx, mandelbrotY);
         ComplexNumbers cNumber =  complexNumber;
         double totalIterations = 0;
         double[] infoArray = new double[2];
@@ -109,6 +133,25 @@ public class JuliaWindow extends Canvas{
         //return (4*realX)/size;
     }
 
+    public double getMandelbrotx() {
+        return mandelbrotx;
+    }
+
+    public void setMandelbrotx(double mandelbrotx) {
+        this.mandelbrotx = mandelbrotx;
+    }
+
+    public double getMandelbrotY() {
+        return mandelbrotY;
+    }
+
+    public void setMandelbrotY(double mandelbrotY) {
+        this.mandelbrotY = mandelbrotY;
+    }
+
+    public String getJuliaName() {
+        return juliaName;
+    }
 }
 
 
