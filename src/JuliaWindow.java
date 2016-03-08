@@ -15,6 +15,8 @@ public class JuliaWindow extends Canvas{
     double mandelbrotx;
     double mandelbrotY;
 
+    ComplexNumbers complexJuliaNumber;
+
     public JuliaWindow(double x, double y){
         size = 600;
         iterationsToComplete = 500;
@@ -26,6 +28,29 @@ public class JuliaWindow extends Canvas{
 
         mandelbrotx = x;
         mandelbrotY = y;
+    }
+
+    public JuliaWindow(ComplexNumbers complexNumber){
+        size = 600;
+        iterationsToComplete = 500;
+
+        xMax = 2;
+        yMin = -1.6;
+        xMin = -2;
+        yMax = 1.6;
+
+        this.complexJuliaNumber = complexNumber;
+    }
+
+    public JuliaWindow(){
+        size = 600;
+        iterationsToComplete = 500;
+
+        xMax = 2;
+        yMin = -1.6;
+        xMin = -2;
+        yMax = 1.6;
+
     }
 
     public JuliaWindow(String jName, double x, double y){
@@ -49,8 +74,10 @@ public class JuliaWindow extends Canvas{
 
         for (int i =0; i < size; i++){
             for (int j = 0; j<size; j++){
-
+                //System.out.println("hghjfhgfgfd");
+//                double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
                 double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
+                //System.out.println(getX(i) + ":" + getY(i));
                 int totalIterations = (int) infoArray[1];
                 g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180,
                         (totalIterations*2)%254, 0));
@@ -61,7 +88,8 @@ public class JuliaWindow extends Canvas{
     }
 
     protected double[] amountOfIterations(ComplexNumbers complexNumber){
-        ComplexNumbers DCN = new ComplexNumbers(mandelbrotx, mandelbrotY);
+//        ComplexNumbers DCN = new ComplexNumbers(mandelbrotx, mandelbrotY);
+        ComplexNumbers DCN = new ComplexNumbers(getMandelbrotx(), getMandelbrotY());
         ComplexNumbers cNumber =  complexNumber;
         double totalIterations = 0;
         double[] infoArray = new double[2];

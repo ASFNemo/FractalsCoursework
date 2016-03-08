@@ -92,8 +92,8 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == save){
-            JFrame frame = new SaveJuliaSet(Double.parseDouble(xPosInput.getText()), Double.parseDouble(yPosInput.getText()));
-            frame.setVisible(true);
+//            JFrame frame = new SaveJuliaSet(Double.parseDouble(xPosInput.getText()), Double.parseDouble(yPosInput.getText()));
+//            frame.setVisible(true);
         }
     }
 }
