@@ -17,6 +17,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     int currenty;
 
     MandelbrotPanel mandelbrotWindow;
+    ZoomPanel zoomPanel;
     JuliaWindow juliaWindow;
 
     Container container;
@@ -92,7 +93,6 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         readFavourites();
         addItem();
         setSize(1000, 720);
-        System.out.println("WATFOORDDDDD!!!!!!!!");
         //mandelbrotWindow = new MandelbrotPanel();
 
         //this.add(mandelbrotWindow);
@@ -111,6 +111,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         mandelbrotWindow.addMouseListener((MouseListener) this);
         mandelbrotWindow.addMouseMotionListener(this);
 
+        // this is the zoom panel, it should be see-through
+        zoomPanel = new ZoomPanel();
+        zoomPanel.setOpaque(false);
 
         iterationsText =  new JLabel("Amount of iterations: ");
         inputIterations = new JTextField("" + mandelbrotWindow.getIterationsToComplete(), 30);
@@ -206,7 +209,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
             }
         });
 
-
+        container.add(zoomPanel);
         container.add(mandelbrotWindow);
         container.add(redrawMandelbrot);
         container.add(updateMandelbrot);
@@ -241,25 +244,26 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
 
         mandelbrotWindow.setBounds(0, 0, 600, 600);
+        zoomPanel.setBounds(0, 0, 600, 600);
         // for teh position of the julia set look in teh action listner below
-        iterationsText.setBounds(0, 600, 150, 25);
-        inputIterations.setBounds(150, 600, 50, 25);
-        xAxisMin.setBounds(0, 625, 50, 25);
-        xAxisMinInput.setBounds(50, 625, 75, 25);
-        xAxisMax.setBounds(125, 625, 50, 25);
-        xAxisMaxInput.setBounds(175, 625, 75, 25);
-        yAxisMin.setBounds(0, 650, 50, 25);
-        yAxisMinInput.setBounds(50, 650, 75, 25);
-        yAxisMax.setBounds(125, 650, 50, 25);
-        yAxisMaxInput.setBounds(175, 650, 75, 25);
-        CNtext.setBounds(400, 600, 200, 25);
-        realLabel.setBounds(250, 625, 150, 25);
-        realInput.setBounds(400, 625, 200, 25);
-        imaginaryLabel.setBounds(250, 650, 150, 25);
-        imaginaryInput.setBounds(400, 650, 200, 25);
+        iterationsText.setBounds(375, 600, 150, 25);
+        inputIterations.setBounds(525, 600, 50, 25);
+        xAxisMin.setBounds(375, 625, 50, 25);
+        xAxisMinInput.setBounds(425, 625, 75, 25);
+        xAxisMax.setBounds(500, 625, 50, 25);
+        xAxisMaxInput.setBounds(550, 625, 75, 25);
+        yAxisMin.setBounds(375, 650, 50, 25);
+        yAxisMinInput.setBounds(425, 650, 75, 25);
+        yAxisMax.setBounds(500, 650, 50, 25);
+        yAxisMaxInput.setBounds(550, 650, 75, 25);
+        CNtext.setBounds(775, 600, 200, 25);
+        realLabel.setBounds(625, 625, 150, 25);
+        realInput.setBounds(775, 625, 200, 25);
+        imaginaryLabel.setBounds(625, 650, 150, 25);
+        imaginaryInput.setBounds(775, 650, 200, 25);
 //        CNLabel.setBounds(290, 625, 280, 25);
-        redrawMandelbrot.setBounds(80, 675, 200, 25);
-        updateMandelbrot.setBounds(320, 675, 200, 25);
+        redrawMandelbrot.setBounds(380, 675, 200, 25);
+        updateMandelbrot.setBounds(620, 675, 200, 25);
         jw.setBounds(600, 0, 400, 400);
         juliaOptions.setBounds(600, 400, 230, 25);
         showJulia.setBounds(850, 400, 140, 25);
@@ -288,7 +292,6 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
         double x = mandelbrotWindow.getX(e.getX());
         double y = mandelbrotWindow.getY(e.getY());
-        System.out.println("CLICK: the mouse was clicked at: " + x + "," + y);
         //System.out.println("x axis: " + x + " y axis: " + y);
 
         ComplexNumbers cn = new ComplexNumbers(x, y);
@@ -314,6 +317,11 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
          */
         xPressed = e.getX();
         yPressed = e.getY();
+
+        //mandelbrotWindow.setDrawZoomRectangle(true);
+
+        zoomPanel.setOldx(xPressed);
+        zoomPanel.setOldy(yPressed);
     }
 
     @Override
@@ -329,6 +337,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         System.out.println("ZOOM: x axis pressed: " + mandelbrotWindow.getX(xPressed) + " x axis released: " + mandelbrotWindow.getX(xReleased));
         System.out.println("ZOOM: y axis pressed: " + mandelbrotWindow.getY(yPressed) + " y axis released: " + mandelbrotWindow.getY(yReleased));
 
+        //mandelbrotWindow.setDrawZoomRectangle(false);
         //System.out.println("xpressed: " + xPressed + " yPressed: " + yPressed);
         //System.out.println("xreleased: " + xPressed + " yreleased: " + yReleased);
 
@@ -364,6 +373,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
 
 
+
     }
 
     @Override
@@ -379,6 +389,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mouseDragged(MouseEvent e) {
+
+        if ((xPressed - xReleased > 2 || xReleased - xPressed > 2) && (yPressed - yReleased > 2 || yReleased - yPressed  >2)) {
+            zoomPanel.setNewx(e.getX());
+            zoomPanel.setNewy(e.getY());
+            zoomPanel.repaint();
+        }
     }
 
     @Override

@@ -1,9 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 
 /**
  * Created by asherfischbaum on 02/03/2016.
@@ -12,26 +8,26 @@ public class MandelbrotPanel extends JPanel {
 
     int windowSiza;
     int iterationsToComplete;
-//    int iterationsCompleted;
-//
-//    ComplexNumbers complexNumberSet;
 
-    boolean drawFractal = true;
+    String fractalToShow;
 
     double xMax;
     double yMin;
     double xMin;
     double yMax;
 
+
     //String FractalToDraw
 
     double fractalX;
     double fractalY;
 
+
     public MandelbrotPanel() {
         windowSiza = 600; // check if we can make the same
         iterationsToComplete = 100; // check if we can make the same
 
+        fractalToShow = "Mandelbrot";
         //complexNumberSet = new ComplexNumbers[windowSiza][windowSiza];
 
         xMax = 2;
@@ -45,21 +41,16 @@ public class MandelbrotPanel extends JPanel {
         super.paintComponent(g);
 
 
-        if (getIterationsToComplete() > 10000) {
-                System.out.println("this is fucking huge");
-            }
-        for (int i = 0; i < windowSiza; i++) {
-            for (int j = 0; j < windowSiza; j++) {
+            for (int i = 0; i < windowSiza; i++) {
+                for (int j = 0; j < windowSiza; j++) {
 
 
-                double[] infoArray = amountOfIterations(new ComplexNumbers(getX(i), getY(j)));
-                int totalIterations = (int) infoArray[1];
-                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
-                        Color(180 / (2 * totalIterations), (totalIterations * 2) % 254, 180 / (2 * totalIterations))); // change this to do the colors more simply
-
-                if (i == 343 && j == 174) {
-                    System.out.println(" real: " + getY(i) + "Complex" + getX(j));
-                }
+                    double[] infoArray = amountOfMAndelbrotIterations(new ComplexNumbers(getX(i), getY(j)));
+                    int totalIterations = (int) infoArray[1];
+                    g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
+                            Color(180 / (2 * totalIterations), (totalIterations * 2) % 254, 180/ (2 * totalIterations))); // change this to do the colors more simply
+//                    g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
+//                            Color(180 / (totalIterations), 220/ (totalIterations), 180/ (5 * totalIterations)));
 
 //                    g.setColor(new Color(
 //                            (new Random()).nextInt(255),
@@ -67,52 +58,29 @@ public class MandelbrotPanel extends JPanel {
 //                            (new Random()).nextInt(255)
 //                    ));
 
-                g.drawLine(i, j, i, j);
+                    g.drawLine(i, j, i, j);
                 }
             }
-            //}
+
         }
 
 
-//    protected ComplexNumbers amountOfIterations(ComplexNumbers complexNumberPassedIn) {
-//        ComplexNumbers cNumber = new ComplexNumbers();
-//        int totalIterations = 0;
-//        while ((totalIterations < iterationsToComplete) && cNumber.modulusSquared() < 4) {
-//            totalIterations++;
-//
-//            //System.out.println("foo");
-//            //cNumber = cNumber.multiply(cNumber).add(complexNumberPassedIn);
-//
-//            cNumber.square();
-//            cNumber.add(complexNumberPassedIn);
-//
-//            if (totalIterations % 10 == 0) {
-//
-//                System.out.println("real: " + complexNumberPassedIn.getReal() + " complex: " + complexNumberPassedIn.getComplex()
-//                        + " Total iterations: " + totalIterations + " magnitude: " + cNumber.modulusSquared());
-//            }
-//        }
-//
-//
-//
-//        return cNumber;
-//        //return totalIterations;
-//    }
 
-
-    protected double[] amountOfIterations(ComplexNumbers complexNumber) {
+    protected double[] amountOfMAndelbrotIterations(ComplexNumbers complexNumber) {
         ComplexNumbers cNumber = new ComplexNumbers();
         double totalIterations = 0;
         double[] infoArray = new  double[2];
         while ((totalIterations < getIterationsToComplete()) && cNumber.modulusSquared() < 4) {
             totalIterations++;
 
-            cNumber.square();
-            cNumber.add(complexNumber);
-
-            if (totalIterations % 10 == 0) {
-
+            if (fractalToShow.equals("Mandelbrot")) {
+                cNumber.square();
+                cNumber.add(complexNumber);
+            } else if (fractalToShow.equals("BurningShip")){
+                cNumber.burningShipSquare();
+                cNumber.add(complexNumber);
             }
+
         }
 
         infoArray[0] = cNumber.modulusSquared();
@@ -120,7 +88,6 @@ public class MandelbrotPanel extends JPanel {
 
 
         return infoArray;
-        //return totalIterations;
     }
 
 
@@ -137,7 +104,7 @@ public class MandelbrotPanel extends JPanel {
         y = y * (yMax - yMin);
         y = y + yMin;
         //setFractalY(y);
-        return y;
+        return -y;
         //return (3.2*realY)/windowSiza;
     }
 

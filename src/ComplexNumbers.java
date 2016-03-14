@@ -53,6 +53,17 @@ public class ComplexNumbers {
         //return total;
     }
 
+    public void burningShipSquare(){
+        double squareReal = getReal() * getReal();
+        double squareComplex = getComplex() * getComplex();
+
+        double compvaltimesrealval = squareReal * squareComplex;
+
+
+        this.real = (squareReal - squareComplex) ;
+        this.complex = (2*(compvaltimesrealval));
+    }
+
 
 
     /*

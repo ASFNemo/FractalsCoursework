@@ -45,8 +45,8 @@
 //            for (int j = 0; j < windowSiza; j++) {
 //
 //
-//                //double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
-//                int totalIterations = amountOfIterations(new ComplexNumbers((getY(i)), getX(j)));
+//                //double[] infoArray = amountOfMAndelbrotIterations(new ComplexNumbers(getY(i), getX(j)));
+//                int totalIterations = amountOfMAndelbrotIterations(new ComplexNumbers((getY(i)), getX(j)));
 //                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
 //                        Color(180 / (2 * totalIterations), (totalIterations * 2) % 254, 180 / (2 * totalIterations))); // change this to do the colors more simply
 //
@@ -67,7 +67,7 @@
 //    }
 //
 //
-////    protected ComplexNumbers amountOfIterations(ComplexNumbers complexNumberPassedIn) {
+////    protected ComplexNumbers amountOfMAndelbrotIterations(ComplexNumbers complexNumberPassedIn) {
 ////        ComplexNumbers cNumber = new ComplexNumbers();
 ////        int totalIterations = 0;
 ////        while ((totalIterations < iterationsToComplete) && cNumber.modulusSquared() < 4) {
@@ -93,7 +93,7 @@
 ////    }
 //
 //
-//    protected int amountOfIterations(ComplexNumbers complexNumber) {
+//    protected int amountOfMAndelbrotIterations(ComplexNumbers complexNumber) {
 //        ComplexNumbers cNumber = new ComplexNumbers();
 //        int totalIterations = 0;
 //        int info;
