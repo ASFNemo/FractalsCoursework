@@ -1,4 +1,10 @@
 import java.awt.*;
+/**
+ * This class is created to do the window calculations of the Julia set and work out where to put each pixel and what
+ * color to set it.
+ *
+ * as a base we use 100 itereations, this gives a good picture without taking to long to render.
+ */
 
 public class JuliaWindow extends Canvas{
 
@@ -17,9 +23,13 @@ public class JuliaWindow extends Canvas{
 
     ComplexNumbers complexJuliaNumber;
 
+    /**
+     * @param x this x represents the real number int the overall complex number
+     * @param y this y represents the imaginary number in the overall complex number
+     */
     public JuliaWindow(double x, double y){
         size = 600;
-        iterationsToComplete = 500;
+        iterationsToComplete = 1000;
 
         xMax = 2;
         yMin = -1.6;
@@ -69,24 +79,41 @@ public class JuliaWindow extends Canvas{
     }
 
 
+    /**
+     * In this part of the this method works out loops through every x,y coordinate on the screen going along the
+     * columns. every x,y coordinate is passed into athe amount of iterations method that returns a doble array, most
+     * importatn int tha array is the second element (in position 1) as this tells us how many iterations it took before
+     * this complex number took to diverge. if it never diverges it is set to black, if it does it is colored differently
+     * depending on the amount of itterations it took to diverge. finaly we draw a dot by drawing a 'line' that goes
+     * from itself to itself.
+     * @param g
+     */
     public void paint(Graphics g){
-        System.out.println("I am painting");
-
         for (int i =0; i < size; i++){
             for (int j = 0; j<size; j++){
-                //System.out.println("hghjfhgfgfd");
-//                double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
                 double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
-                //System.out.println(getX(i) + ":" + getY(i));
                 int totalIterations = (int) infoArray[1];
-                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180,
-                        (totalIterations*2)%254, 0));
+
+                //g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180,
+                        //(totalIterations*2)%254, 0));
+
+                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
+                        Color(200/(2*totalIterations +1), (totalIterations*2)%180, 180/(2*totalIterations +1)));
 
                 g.drawLine(i, j, i, j);
             }
         }
     }
 
+    /**
+     * This method works out how many iterations are needed for the complex number to diverge up to a maximum of 100
+     * iterations. every itteration the complex number is squared and we add the complex number from the julia set and
+     * then increment the counter
+     * @param complexNumber we passs in the complex number used for this julia set
+     *
+     *
+     * @return
+     */
     protected double[] amountOfIterations(ComplexNumbers complexNumber){
 //        ComplexNumbers DCN = new ComplexNumbers(mandelbrotx, mandelbrotY);
         ComplexNumbers DCN = new ComplexNumbers(getMandelbrotx(), getMandelbrotY());
@@ -123,7 +150,7 @@ public class JuliaWindow extends Canvas{
         y = y + yMin;
         //setFractalY(y);
         return y;
-        //return (3.2*realY)/size;
+        //return (3.2*realY)/windowSiza;
     }
 
     public double getdY(double realY){
@@ -132,7 +159,7 @@ public class JuliaWindow extends Canvas{
         y = y + yMin;
         //setFractalY(y);
         return y;
-        //return (3.2*realY)/size;
+        //return (3.2*realY)/windowSiza;
     }
 
 
@@ -145,7 +172,7 @@ public class JuliaWindow extends Canvas{
         //setFractalX(x);
 
         return x;
-        //return (4*realX)/size;
+        //return (4*realX)/windowSiza;
     }
 
 
@@ -155,10 +182,7 @@ public class JuliaWindow extends Canvas{
         x = x * (xMax - xMin);
         x = x + xMin;
 
-        //setFractalX(x);
-
         return x;
-        //return (4*realX)/size;
     }
 
     public double getMandelbrotx() {
@@ -193,139 +217,3 @@ public class JuliaWindow extends Canvas{
 
 
 
-//import java.awt.*;
-//
-////
-/////**
-//// * Created by asherfischbaum on 05/03/2016.
-//// */
-//public class JuliaWindow extends Canvas{
-//
-//    int size;√
-//    int iterationsToComplete; √
-//    int iterationsCompleted;
-//
-//    ComplexNumbers complexNumberPassedIn;
-//
-//    double xMax;
-//    double yMin;
-//    double xMin;
-//    double yMax;
-//
-//    double fractalX;
-//    double fractalY;
-//
-//    double cReal;
-//    double cImaginary;
-//
-//    public JuliaWindow(ComplexNumbers cNum, double real, double imaginary) {
-//        //toDraw = false;
-//
-//        size = 600; // check if we can make the same
-//        iterationsToComplete = 500; // check if we can make the same
-//
-//        //complexNumberSet = new ComplexNumbers[size][size];
-//
-//        xMax = 2;
-//        yMin = -1.6;
-//        xMin = -2;
-//        yMax = 1.6;
-//
-//        this.cReal = real;
-//        this.cImaginary = imaginary;
-//
-//        this.complexNumberPassedIn = cNum;
-//
-////        //double xStep = (xMin * xMax) / size;
-////        //double yStep = (yMax * yMin) / size;
-//////
-//    }
-//////
-//    public void paint(Graphics g) {
-//////        //if (toDraw) {
-//        for (int i = 0; i < size; i++) {
-//            for (int j = 0; j < size; j++) {
-//////                //int totalIterations = amountOfIterations(complexNumberSet[i][j]); // convert the pixel to a complex number!!!
-//////                //int totalIterations = amountOfIterations(new ComplexNumbers(getY(j), getX(i)));
-//////                //int totalIterations = amountOfIterations(complexNumberSet);
-//////                //g.setColor((totalIterations == iterationsToComplete) ? Color.BLACK : new Color(180, (totalIterations*2)%254, 0)); // change this to do the colors more simply
-//////                //g.setColor(new Color(Math.round(225/(totalIterations+1)), Math.round(225/(totalIterations+1)),
-//////                //      Math.round(225/(totalIterations+1))));
-//////                //g.fillRect(i, j, 1, 1);
-//////                //int color = iterationsToComplete - totalIterations;
-////////                    //g.setColor(new Color(color, color, color));
-////////                    if (amountOfIterations(new ComplexNumbers(getY(i), getX(j))).modulusSquared() <= 4){
-////////                        g.setColor(Color.BLACK);
-////////                    } else {
-////////                        g.setColor(Color.WHITE);
-////////                    }
-//////
-//                //double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
-//                double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
-//                //double[] infoArray = amountOfIterations(complexNumberPassedIn);
-//                int totalIterations = (int) infoArray[1];
-//                g.setColor((totalIterations == iterationsToComplete) ? Color.BLACK : new Color(180, (totalIterations*2)%254, 0)); // change this to do the colors more simply
-////////                    g.setColor(new Color(Math.round(2*(totalIterations+1)/225), Math.round(2*(totalIterations+1)/225),
-////////                    Math.round(2*(totalIterations+1)/225)));
-//////
-//////
-////                    g.setColor(new Color(
-////                            (new Random()).nextInt(255),
-////                            (new Random()).nextInt(255),
-////                            (new Random()).nextInt(255)
-////                    ));
-//
-//                g.drawLine(i, j, i, j);
-//            }
-//        }
-//        //}
-//    }
-//////
-//    protected double[] amountOfIterations(ComplexNumbers complexNumber) {
-//        ComplexNumbers cNumber = new ComplexNumbers(getY(1), getX(1));
-//        double totalIterations = 0;
-//        double[] infoArray = new  double[2];
-//        while ((totalIterations < iterationsToComplete) && complexNumber.modulusSquared() < 4) {
-//            totalIterations++;
-//
-//            //System.out.println("foo");
-//            //cNumber = cNumber.multiply(cNumber).add(complexNumberPassedIn);
-//
-//            //this.complexNumberPassedIn.square();
-//
-//            complexNumber.square();
-//            complexNumber.add(cNumber);
-//            //cNumber.square();
-//            //cNumber.add(this.complexNumberPassedIn);
-//
-////            if (totalIterations % 10 == 0) {
-////
-////                System.out.println("real: " + complexNumberPassedIn.getReal() + " complex: " + complexNumberPassedIn.getComplex()
-////                        + " Total iterations: " + totalIterations + " magnitude: " + cNumber.modulusSquared());
-////            }
-//        }
-//
-//        infoArray[0] = complexNumber.modulusSquared();
-//        infoArray[1] = totalIterations;
-//
-//
-//        return infoArray;
-//        //return totalIterations;
-//    }
-//
-//    public double getY(double realY){
-//        double y = (((double) realY)/(this.getHeight()));
-//        y = y * (yMax - yMin);
-//        y = y + yMin;
-//        return y;
-//    }
-//
-//    public double getX(double realX){
-//
-//        double x = (realX)/(this.getWidth());
-//        x = x * (xMax - xMin);
-//        x = x + xMin;
-//
-//        return x;
-//    }
-//}

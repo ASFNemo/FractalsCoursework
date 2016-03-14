@@ -23,7 +23,7 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
     JLabel yPosInput;
 
     JButton save;
-//
+    //
     public JuliaMainFrame(ComplexNumbers complexNumber, double x, double y){
         super();
 
@@ -35,7 +35,7 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
         //juliaWindow = new JuliaWindow(complexNumber, x, y);
 
         //this.add(mandelbrotWindow);
-        //this.add(new MandelbrotWidnow());
+        //this.add(new MandelbrotPanel());
         setResizable(false);
         frameItem();
     }
@@ -53,23 +53,23 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
         juliaWindow = new JuliaWindow(x, y);
 
         //this.add(mandelbrotWindow);
-        //this.add(new MandelbrotWidnow());
+        //this.add(new MandelbrotPanel());
         setResizable(false);
         frameItem();
     }
 
-  public void frameItem(){
+    public void frameItem(){
 
         container = getContentPane();
         container.setLayout(null);
 
         xPosition = new JLabel("X position: ");
         xPosInput = new JLabel(""+ x);
-        //xPosInput.setText("" + juliaWindow.getFractalY());
+        //realInput.setText("" + juliaWindow.getFractalY());
 
         yPosition = new JLabel("Y position");
         yPosInput = new JLabel("" + y);
-        //yPosInput.setText("" + juliaWindow.getFractalY());
+        //imaginaryInput.setText("" + juliaWindow.getFractalY());
 //
         save = new JButton("Save this Julia set");
         save.addActionListener(this);
@@ -87,12 +87,12 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
         yPosition.setBounds(15, 440, 75, 30);
         yPosInput.setBounds(100, 440, 180, 30);
         save.setBounds(260, 405, 120, 70);
-   }
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == save){
-//            JFrame frame = new SaveJuliaSet(Double.parseDouble(xPosInput.getText()), Double.parseDouble(yPosInput.getText()));
+//            JFrame frame = new SaveJuliaSet(Double.parseDouble(realInput.getText()), Double.parseDouble(imaginaryInput.getText()));
 //            frame.setVisible(true);
         }
     }

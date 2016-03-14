@@ -17,11 +17,11 @@
 //    double xToSave;
 //    double yToSave;
 //
-//    JLabel xPosition;
-//    JLabel xPosInput;
+//    JLabel realLabel;
+//    JLabel realInput;
 //
-//    JLabel yPosition;
-//    JLabel yPosInput;
+//    JLabel imaginaryLabel;
+//    JLabel imaginaryInput;
 //
 //    JLabel setName;
 //    JTextField setNameTextField;
@@ -40,7 +40,7 @@
 //        yToSave = y;
 //
 //        addItem();
-//        setSize(250, 200);
+//        setWindowSiza(250, 200);
 //        setResizable(false);
 //
 //    }
@@ -49,10 +49,10 @@
 //        container = getContentPane();
 //        container.setLayout(null);
 //
-//        xPosition = new JLabel("X Position: ");
-//        xPosInput = new JLabel("" + xToSave);
-//        yPosition = new JLabel("Y Positon: ");
-//        yPosInput = new JLabel("" + yToSave);
+//        realLabel = new JLabel("X Position: ");
+//        realInput = new JLabel("" + xToSave);
+//        imaginaryLabel = new JLabel("Y Positon: ");
+//        imaginaryInput = new JLabel("" + yToSave);
 //
 //        setName = new JLabel("Name: ");
 //        setNameTextField = new JTextField();
@@ -63,19 +63,19 @@
 //        warning = new JLabel();
 //        warning.setForeground(Color.red);
 //
-//        container.add(xPosition);
-//        container.add(xPosInput);
-//        container.add(yPosition);
-//        container.add(yPosInput);
+//        container.add(realLabel);
+//        container.add(realInput);
+//        container.add(imaginaryLabel);
+//        container.add(imaginaryInput);
 //        container.add(setName);
 //        container.add(setNameTextField);
 //        container.add(save);
 //        container.add(warning);
 //
-//        xPosition.setBounds(10, 10, 70, 30);
-//        xPosInput.setBounds(90, 10, 150, 30);
-//        yPosition.setBounds(10, 50, 70, 30);
-//        yPosInput.setBounds(90, 50, 150, 30);
+//        realLabel.setBounds(10, 10, 70, 30);
+//        realInput.setBounds(90, 10, 150, 30);
+//        imaginaryLabel.setBounds(10, 50, 70, 30);
+//        imaginaryInput.setBounds(90, 50, 150, 30);
 //        setName.setBounds(10, 90, 70, 30);
 //        setNameTextField.setBounds(90, 90, 150, 30);
 //        save.setBounds(90, 130, 70, 30);

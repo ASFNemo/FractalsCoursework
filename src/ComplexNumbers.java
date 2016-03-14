@@ -24,13 +24,6 @@ public class ComplexNumbers {
     }
 
 
-//    public int square(){
-//        int square;
-//        square = ((getReal()*getReal()) - (getComplex()*getComplex()));
-
-    // return array of 11 real number and 1 complex number
-//    }
-
 
     // when we want to iterate so we take the real number of the output + the real number of c, then we take the complex
     // number of the output and the complex number of c to give us the next z(n) that we should be multiplying.
@@ -41,7 +34,7 @@ public class ComplexNumbers {
     // to add complex numbers, you addd the reals and the complex and that gives us the new complex number. That is what
     // we are doing here and returning a new complex number.
     public void add(ComplexNumbers complexNumber){
-         this.real += complexNumber.getReal();
+        this.real += complexNumber.getReal();
         this.complex += complexNumber.getComplex();
 
         //return new ComplexNumbers(addReal, addComplex);
