@@ -53,6 +53,19 @@ public class ComplexNumbers {
         //return total;
     }
 
+    public ComplexNumbers cube(){
+
+        double squareReal = getReal() * getReal();
+        double squareComplex = getComplex() * getComplex();
+
+        double compvaltimesrealval = getReal() * getComplex();
+
+        this.real = (getReal()*(squareReal - (3*squareComplex)));
+        this.complex = (getComplex() * ((3*squareReal) - squareComplex));
+
+        return new ComplexNumbers(real, complex);
+    }
+
     public void burningShipSquare(){
         double squareReal = getReal() * getReal();
         double squareComplex = getComplex() * getComplex();
@@ -61,7 +74,7 @@ public class ComplexNumbers {
 
 
         this.real = (squareReal - squareComplex) ;
-        this.complex = (2*(compvaltimesrealval));
+        this.complex = -(2*(compvaltimesrealval));
     }
 
 

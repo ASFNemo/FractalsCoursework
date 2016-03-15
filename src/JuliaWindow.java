@@ -94,12 +94,11 @@ public class JuliaWindow extends Canvas{
                 double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
                 int totalIterations = (int) infoArray[1];
 
-                //g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180,
-                        //(totalIterations*2)%254, 0));
+//                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180,
+//                        (totalIterations*2)%254, 0));
 
                 g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
                         Color(200/(2*totalIterations +1), (totalIterations*2)%180, 180/(2*totalIterations +1)));
-
                 g.drawLine(i, j, i, j);
             }
         }

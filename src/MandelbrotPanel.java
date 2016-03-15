@@ -52,11 +52,23 @@ public class MandelbrotPanel extends JPanel {
 //                    g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
 //                            Color(180 / (totalIterations), 220/ (totalIterations), 180/ (5 * totalIterations)));
 
+//                    g,setRGB(x, y, maxColors * 10%20)
+//                    g.setColor(new Color(x, y, iter_counter | (iter_counter << 20)));
+
 //                    g.setColor(new Color(
 //                            (new Random()).nextInt(255),
 //                            (new Random()).nextInt(255),
 //                            (new Random()).nextInt(255)
 //                    ));
+
+//                    float saturation = 1f;
+//                    float brightness = totalIterations < iterationsToComplete ? 1f : 0;
+//                    float hue =  (totalIterations%256)/255.0f;
+//                    Color color = Color.getHSBColor((float) hue, saturation, brightness);
+//                    g.setColor(color);
+
+//                    g.setColor((totalIterations ==getIterationsToComplete()) ? Color.BLACK : new Color(2*totalIterations/((totalIterations%2 + 1)), totalIterations/5, 4*totalIterations/((totalIterations%4) + 4)));
+
 
                     g.drawLine(i, j, i, j);
                 }
@@ -79,7 +91,20 @@ public class MandelbrotPanel extends JPanel {
             } else if (fractalToShow.equals("BurningShip")){
                 cNumber.burningShipSquare();
                 cNumber.add(complexNumber);
+            } else if (fractalToShow.equals("NewtonsFractal")){
+                cNumber = cNumber.cube();
+                cNumber.add(cNumber);
+                cNumber.add(new ComplexNumbers(1, 0));
+
+            } else if(fractalToShow.equals("BirdOFPrey")){
+
+            } else if (fractalToShow.equals("z^8")){
+                cNumber.square();
+                cNumber.square();
+                cNumber.square();
+                cNumber.add(complexNumber);
             }
+
 
         }
 
@@ -198,5 +223,9 @@ public class MandelbrotPanel extends JPanel {
 
     public double getyMax() {
         return yMax;
+    }
+
+    public void setFractalToShow(String fractalToShow) {
+        this.fractalToShow = fractalToShow;
     }
 }

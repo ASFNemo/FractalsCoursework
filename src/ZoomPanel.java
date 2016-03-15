@@ -23,6 +23,8 @@ public class ZoomPanel extends JPanel {
 
         //g.drawRect((int) getOldx(), (int) getOldy(), (int) zoomRectangleWidth(), (int) zoomRectangleHeight());
 
+        g.setColor(Color.white);
+
         // draw line 1 (old x, old y) -> (new x, old y)
         g.drawLine((int) getOldx(), (int) getOldy(), (int) getNewx(), (int) getOldy());
 
@@ -32,6 +34,7 @@ public class ZoomPanel extends JPanel {
         g.drawLine((int) getOldx(), (int) getNewy(), (int) getNewx(), (int) getNewy());
         // draw line 4 (new x, old y) -> (new x, new y)
         g.drawLine((int) getNewx(), (int) getOldy(), (int) getNewx(), (int) getNewy());
+
     }
 
     public double getOldx() {
