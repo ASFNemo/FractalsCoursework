@@ -53,28 +53,42 @@ public class ComplexNumbers {
         //return total;
     }
 
-    public ComplexNumbers cube(){
+//    public ComplexNumbers cube(){
+//
+//        double squareReal = getReal() * getReal();
+//        double squareComplex = getComplex() * getComplex();
+//
+//        double compvaltimesrealval = getReal() * getComplex();
+//
+//        this.real = (getReal()*(squareReal - (3*squareComplex)));
+//        this.complex = (getComplex() * ((3*squareReal) - squareComplex));
+//
+//        return new ComplexNumbers(real, complex);
+//    }
 
+    public void cube(){
         double squareReal = getReal() * getReal();
         double squareComplex = getComplex() * getComplex();
-
-        double compvaltimesrealval = getReal() * getComplex();
 
         this.real = (getReal()*(squareReal - (3*squareComplex)));
         this.complex = (getComplex() * ((3*squareReal) - squareComplex));
-
-        return new ComplexNumbers(real, complex);
     }
 
-    public void burningShipSquare(){
-        double squareReal = getReal() * getReal();
-        double squareComplex = getComplex() * getComplex();
+//    public void burningShipSquare(){
+//        double squareReal = getReal() * getReal();
+//        double squareComplex = getComplex() * getComplex();
+//
+//        double compvaltimesrealval = squareReal * squareComplex;
+//
+//
+//        this.real = (squareReal - squareComplex) ;
+//        this.complex = -(2*(compvaltimesrealval));
+//    }
 
-        double compvaltimesrealval = squareReal * squareComplex;
-
-
-        this.real = (squareReal - squareComplex) ;
-        this.complex = -(2*(compvaltimesrealval));
+    public void makePositive(){
+        this.real = Math.abs(this.real);
+        this.complex = Math.abs(this.complex);
+        this.complex = -this.complex; //change this as i think it is flipping the fractal everytime we zoom
     }
 
 

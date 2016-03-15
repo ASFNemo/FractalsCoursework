@@ -11,7 +11,10 @@ public class ZoomPanel extends JPanel {
     double newy;
     double newx;
 
+    boolean buttonDown;
+
     public ZoomPanel(){
+
 
     }
 
@@ -22,19 +25,19 @@ public class ZoomPanel extends JPanel {
         // draw a line from the old to new x/y posisition
 
         //g.drawRect((int) getOldx(), (int) getOldy(), (int) zoomRectangleWidth(), (int) zoomRectangleHeight());
+        if (buttonDown) {
+            g.setColor(Color.white);
 
-        g.setColor(Color.white);
+            // draw line 1 (old x, old y) -> (new x, old y)
+            g.drawLine((int) getOldx(), (int) getOldy(), (int) getNewx(), (int) getOldy());
 
-        // draw line 1 (old x, old y) -> (new x, old y)
-        g.drawLine((int) getOldx(), (int) getOldy(), (int) getNewx(), (int) getOldy());
-
-        // draw line 2 (old x, old y) -> (old x, new y)
-        g.drawLine((int) getOldx(), (int) getOldy(), (int) getOldx(), (int) getNewy());
-        // draw line 3 (old x, new y) -> (new x, new y)
-        g.drawLine((int) getOldx(), (int) getNewy(), (int) getNewx(), (int) getNewy());
-        // draw line 4 (new x, old y) -> (new x, new y)
-        g.drawLine((int) getNewx(), (int) getOldy(), (int) getNewx(), (int) getNewy());
-
+            // draw line 2 (old x, old y) -> (old x, new y)
+            g.drawLine((int) getOldx(), (int) getOldy(), (int) getOldx(), (int) getNewy());
+            // draw line 3 (old x, new y) -> (new x, new y)
+            g.drawLine((int) getOldx(), (int) getNewy(), (int) getNewx(), (int) getNewy());
+            // draw line 4 (new x, old y) -> (new x, new y)
+            g.drawLine((int) getNewx(), (int) getOldy(), (int) getNewx(), (int) getNewy());
+        }
     }
 
     public double getOldx() {
@@ -69,4 +72,11 @@ public class ZoomPanel extends JPanel {
         this.newx = newx;
     }
 
+    public boolean isButtonDown() {
+        return buttonDown;
+    }
+
+    public void setButtonDown(boolean buttonDown) {
+        this.buttonDown = buttonDown;
+    }
 }

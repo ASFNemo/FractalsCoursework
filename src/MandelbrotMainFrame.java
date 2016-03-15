@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * Created by asherfischbaum on 03/03/2016.
  */
-public class MandelbrotMainFrame extends JFrame implements ActionListener, MouseListener, MouseMotionListener{
+public class MandelbrotMainFrame extends JFrame implements ActionListener, MouseListener, MouseMotionListener, KeyListener {
 
     //
 
@@ -26,6 +26,10 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     JRadioButton mandelbrot;
     JRadioButton burningShip;
     JRadioButton z8;
+    JRadioButton BOP;
+    JRadioButton BSV;
+
+    boolean zPressed;
 
     JLabel iterationsText;
     JTextField inputIterations;
@@ -77,6 +81,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     int i;
 
+    double moveX;
+    double moveY;
+
 
     JuliaWindow jw;
 
@@ -108,17 +115,22 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         //this.add(new MandelbrotPanel());
         setResizable(false);
         i = 0;
-
+        moveX = 0.0;
+        moveY  = 0.0;
     }
 
     public void addItem(){
         container = getContentPane();
         container.setLayout(null); // change this later to add the bar at the bottom to add the menu  bar
 
+        zPressed = false;
         mandelbrotWindow = new MandelbrotPanel();
         mandelbrotWindow.setBackground(Color.WHITE); // may want to make this black/grey at a later point, but try things out
         mandelbrotWindow.addMouseListener((MouseListener) this);
         mandelbrotWindow.addMouseMotionListener(this);
+        mandelbrotWindow.setFocusable(true);
+        mandelbrotWindow.requestFocus();
+        mandelbrotWindow.addKeyListener(this);
 
         // this is the zoom panel, it should be see-through
         zoomPanel = new ZoomPanel();
@@ -147,11 +159,28 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
                 changeFractal("z^8");
             }
         });
+        BOP = new JRadioButton("Bird of Prey");
+        BOP.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeFractal("BirdOFPrey");
+            }
+        });
+        BSV = new JRadioButton("Burning Ship Variant");
+        BSV.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                changeFractal("bsv");
+            }
+        });
 
 
         setOption.add(mandelbrot);
         setOption.add(burningShip);
         setOption.add(z8);
+        setOption.add(BOP);
+        setOption.add(BSV);
+
 
 
         iterationsText =  new JLabel("Amount of iterations: ");
@@ -252,11 +281,15 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
             }
         });
 
+
+
         container.add(zoomPanel);
         container.add(mandelbrotWindow);
         container.add(mandelbrot);
         container.add(burningShip);
         container.add(z8);
+        container.add(BOP);
+        container.add(BSV);
         container.add(redrawMandelbrot);
         container.add(updateMandelbrot);
         container.add(iterationsText);
@@ -287,13 +320,16 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         container.add(warning);
         container.add(save);
 
+        container.add(mandelbrotWindow);
 
 
         mandelbrotWindow.setBounds(0, 0, 600, 600);
         zoomPanel.setBounds(0, 0, 600, 600);
-        mandelbrot.setBounds(0, 625, 250, 25);
-        burningShip.setBounds(0, 650, 250, 25);
-        z8.setBounds(0, 675, 250, 25);
+        mandelbrot.setBounds(0, 625, 200, 25);
+        burningShip.setBounds(0, 650, 200, 25);
+        z8.setBounds(0, 675, 200, 25);
+        BOP.setBounds(200, 625, 200, 25);
+        BSV.setBounds(200, 650, 200, 25);
         // for teh position of the julia set look in teh action listner below
         iterationsText.setBounds(375, 600, 150, 25);
         inputIterations.setBounds(525, 600, 50, 25);
@@ -343,19 +379,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         double y = mandelbrotWindow.getY(e.getY());
         //System.out.println("x axis: " + x + " y axis: " + y);
 
-        ComplexNumbers cn = new ComplexNumbers(x, y);
+        //ComplexNumbers cn = new ComplexNumbers(x, y);
 
-        realInput.setText("" + x);
-        imaginaryInput.setText("" + y);
-        jSetXPosInput.setText(""+x);
-        jSetYPosInput.setText(""+y);
-
-        // input the getReal and getImaginary with an i after the getImaginary.
-        //CNLabel.setText(cn.getReal() + " + " + y + "i");
-
-        jw.setMandelbrotx(x);
-        jw.setMandelbrotY(y);
-        jw.repaint();
+        drawJulia(x, y);
 
     }
 
@@ -368,9 +394,10 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         yPressed = e.getY();
 
         //mandelbrotWindow.setDrawZoomRectangle(true);
-
+        zoomPanel.setButtonDown(true);
         zoomPanel.setOldx(xPressed);
         zoomPanel.setOldy(yPressed);
+
     }
 
     @Override
@@ -395,7 +422,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         //System.out.println("xpressed: " + xPressed + " yPressed: " + yPressed);
         //System.out.println("xreleased: " + xPressed + " yreleased: " + yReleased);
 
-        if ((xPressed - xReleased > 5 || xReleased - xPressed > 5) && (yPressed - yReleased > 5 || yReleased - yPressed  >5)) {
+        if ((xPressed - xReleased > 5 || xReleased - xPressed > 5) && (yPressed - yReleased > 5 || yReleased - yPressed > 5)) {
 
             if (xReleased > xPressed) {
                 oldXMin = Double.parseDouble(xAxisMinInput.getText());
@@ -429,49 +456,34 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
                 System.out.println("in if 4");
             }
 
-            xMinDist = xMinDist / 4;
-            xMaxDist = xMaxDist / 4;
-            yminDist = yminDist / 4;
-            yMaxDist = yMaxDist / 4;
-
             mandelbrotWindow.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
             mandelbrotWindow.setxMin(Double.parseDouble(xAxisMinInput.getText()));
-            System.out.print("xmin: " + Double.parseDouble(xAxisMinInput.getText()));
+            System.out.println("xmin: " + Double.parseDouble(xAxisMinInput.getText()));
             mandelbrotWindow.setxMax(Double.parseDouble(xAxisMaxInput.getText()));
             System.out.println("c");
             mandelbrotWindow.setyMin(Double.parseDouble(yAxisMinInput.getText()));
             mandelbrotWindow.setyMax(Double.parseDouble(yAxisMaxInput.getText()));
             mandelbrotWindow.repaint();
 
-//            for (int i = 0; i < 4; i++){
-//                oldXMin = Double.parseDouble(xAxisMinInput.getText()) + mandelbrotWindow.getX(xMinDist);
-//                oldXmax = Double.parseDouble(xAxisMaxInput.getText()) + mandelbrotWindow.getX(xMaxDist);
-//                oldYmin = Double.parseDouble(yAxisMinInput.getText()) + mandelbrotWindow.getY(yminDist);
-//                oldYMax = Double.parseDouble(yAxisMaxInput.getText()) + mandelbrotWindow.getY(yMaxDist);
-////                mandelbrotWindow.setxMin(oldXMin);
-////                mandelbrotWindow.setxMax(oldXmax);
-////                mandelbrotWindow.setyMin(oldYmin);
-////                mandelbrotWindow.setyMax(oldYMax);
-//                xAxisMinInput.setText(""+oldXMin);
-//                xAxisMaxInput.setText("" + oldXmax);
-//                yAxisMin.setText("" + oldYmin);
-//                yAxisMax.setText("" + oldYMax);
-//
-//                mandelbrotWindow.repaint();
-//                try {
-//                    Thread.sleep(10);
-//                } catch (InterruptedException e1) {
-//                    e1.printStackTrace();
-//                }
-//                System.out.println("loop: " + i);
-//                System.out.println("old Min: " + oldXMin + "OldMax: " + oldXmax);
-//                System.out.println("oldymin: " + oldYmin + "oldyMax: " + oldYMax);
-//            }
-//        }
+            double ixm= Double.parseDouble(xAxisMinInput.getText());
+            double ixMa = Double.parseDouble(xAxisMaxInput.getText());
+            double iym= Double.parseDouble(yAxisMinInput.getText());
+            double iyMa = Double.parseDouble(yAxisMaxInput.getText());
 
+            if (ixm > -2 && ixMa < 2){
+                double avDistX = ((ixm - (-2)) + (2 -ixMa))/2;
+                double avDistY = ((iym - (-1.6)) + (1.6 - ixMa))/2;
+
+                moveX = avDistX/20;
+                moveY = avDistY/20;
+            }
+
+            zoomPanel.setButtonDown(false);
         }
 
+
     }
+
 
     @Override
     public void mouseEntered(MouseEvent e) {
@@ -496,7 +508,25 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        double x = mandelbrotWindow.getX(e.getX());
+        double y = mandelbrotWindow.getY(e.getY());
+        if (zPressed) {
+            drawJulia(x, y);
+        }
+    }
 
+    public void drawJulia(double x, double y){
+        realInput.setText("" + x);
+        imaginaryInput.setText("" + y);
+        jSetXPosInput.setText("" + x);
+        jSetYPosInput.setText("" + y);
+
+        // input the getReal and getImaginary with an i after the getImaginary.
+        //CNLabel.setText(cn.getReal() + " + " + y + "i");
+
+        jw.setMandelbrotx(x);
+        jw.setMandelbrotY(y);
+        jw.repaint();
     }
 
     public void readFavourites(){
@@ -576,4 +606,84 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         this.currenty = currenty;
     }
 
+    public void moveLeft() {
+        double newInput = (Double.parseDouble(xAxisMinInput.getText()) - moveX);
+        if (newInput >= -2) {
+            xAxisMinInput.setText("" + newInput);
+            xAxisMaxInput.setText("" + (Double.parseDouble(xAxisMaxInput.getText()) - moveX));
+            setAxes();
+            mandelbrotWindow.repaint();
+        } else{
+            // work out that it works the distancce to the edge bfore making the move and only move the max side
+        }
+
+    }
+    public void moveRight(){
+        double newInput = (Double.parseDouble(xAxisMaxInput.getText()) + moveX);
+        if (newInput <= 2) {
+            xAxisMaxInput.setText("" + newInput);
+            xAxisMinInput.setText("" + (Double.parseDouble(xAxisMinInput.getText()) + moveX));
+            setAxes();
+            mandelbrotWindow.repaint();
+        }
+
+    }
+    public void moveUp(){
+        double newInput = (Double.parseDouble(yAxisMaxInput.getText()) + moveY);
+        if (newInput <= 1.6) {
+            yAxisMaxInput.setText("" + newInput);
+            yAxisMinInput.setText("" + (Double.parseDouble(yAxisMinInput.getText()) + moveY));
+            setAxes();
+            mandelbrotWindow.repaint();
+        }
+    }
+    public void moveDown() {
+        double newInput = (Double.parseDouble(yAxisMinInput.getText()) - moveY);
+        if (newInput >= -1.6) {
+            yAxisMinInput.setText("" + newInput);
+            yAxisMaxInput.setText("" + (Double.parseDouble(yAxisMaxInput.getText()) - moveY));
+            setAxes();
+            mandelbrotWindow.repaint();
+        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_Z){
+            System.out.println("z is pressed");
+            zPressed = true;
+        } if (e.getKeyCode() == KeyEvent.VK_LEFT){
+            System.out.println("I  SAID LEF6T GOD-DAMMIT");
+            moveLeft();
+        } if (e.getKeyCode() == KeyEvent.VK_RIGHT){
+            System.out.println("SO NOW YOU WANT TO GO RIGHT");
+            moveRight();
+        } if (e.getKeyCode() == KeyEvent.VK_UP){
+            System.out.println("UP WE GO!");
+            moveUp();
+        } if (e.getKeyCode() == KeyEvent.VK_DOWN){
+            System.out.println("everything that goes up must come down :(");
+            moveDown();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        if (e.getKeyCode() == KeyEvent.VK_Z){
+            System.out.println("z is released");
+            zPressed = false;
+        }
+    }
+
+    public void setAxes(){
+        mandelbrotWindow.setxMin(Double.parseDouble(xAxisMinInput.getText()));
+        mandelbrotWindow.setxMax(Double.parseDouble(xAxisMaxInput.getText()));
+        mandelbrotWindow.setyMin(Double.parseDouble(yAxisMinInput.getText()));
+        mandelbrotWindow.setyMax(Double.parseDouble(yAxisMaxInput.getText()));
+    }
 }

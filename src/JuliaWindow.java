@@ -29,7 +29,7 @@ public class JuliaWindow extends Canvas{
      */
     public JuliaWindow(double x, double y){
         size = 600;
-        iterationsToComplete = 1000;
+        iterationsToComplete = 100;
 
         xMax = 2;
         yMin = -1.6;
