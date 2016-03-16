@@ -84,6 +84,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     double moveX;
     double moveY;
 
+    double zoomX;
+    double zoomY;
+
 
     JuliaWindow jw;
 
@@ -116,7 +119,11 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         setResizable(false);
         i = 0;
         moveX = 0.0;
-        moveY  = 0.0;
+        moveY = 0.0;
+        zoomX = 0.2;
+        zoomY = 0.16;
+        zoomAndMove();
+
     }
 
     public void addItem(){
@@ -465,18 +472,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
             mandelbrotWindow.setyMax(Double.parseDouble(yAxisMaxInput.getText()));
             mandelbrotWindow.repaint();
 
-            double ixm= Double.parseDouble(xAxisMinInput.getText());
-            double ixMa = Double.parseDouble(xAxisMaxInput.getText());
-            double iym= Double.parseDouble(yAxisMinInput.getText());
-            double iyMa = Double.parseDouble(yAxisMaxInput.getText());
-
-            if (ixm > -2 && ixMa < 2){
-                double avDistX = ((ixm - (-2)) + (2 -ixMa))/2;
-                double avDistY = ((iym - (-1.6)) + (1.6 - ixMa))/2;
-
-                moveX = avDistX/20;
-                moveY = avDistY/20;
-            }
+            zoomAndMove();
 
             zoomPanel.setButtonDown(false);
         }
@@ -606,6 +602,27 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         this.currenty = currenty;
     }
 
+    public void zoomAndMove(){
+        double ixm= Double.parseDouble(xAxisMinInput.getText());
+        double ixMa = Double.parseDouble(xAxisMaxInput.getText());
+        double iym= Double.parseDouble(yAxisMinInput.getText());
+        double iyMa = Double.parseDouble(yAxisMaxInput.getText());
+
+        if (ixm > -2 && ixMa < 2){
+            double avDistX = ((ixm - (-2)) + (2 -ixMa))/2;
+            double avDistY = ((iym - (-1.6)) + (1.6 - iyMa))/2;
+
+            moveX = avDistX/20;
+            moveY = avDistY/20;
+        }
+
+//        double xTotDist = ixMa - ixm;
+//        double yTotDist = iyMa - iym;
+
+//        zoomX = xTotDist/15;
+//        zoomY = yTotDist/15;
+    }
+
     public void moveLeft() {
         double newInput = (Double.parseDouble(xAxisMinInput.getText()) - moveX);
         if (newInput >= -2) {
@@ -647,6 +664,44 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    public void zoomIn(){
+        System.out.println("yaaawww");
+
+        double newXMin = (Double.parseDouble(xAxisMinInput.getText()) + zoomX);
+        double newXMax = (Double.parseDouble(xAxisMaxInput.getText()) - zoomX);
+        double newYMin = (Double.parseDouble(yAxisMinInput.getText()) + zoomY);
+        double newYMax = (Double.parseDouble(yAxisMaxInput.getText()) - zoomY);
+
+        if (newXMax - newXMin > 0 && newYMax - newYMin > 0) {
+
+            xAxisMinInput.setText("" + newXMin);
+            xAxisMaxInput.setText("" + newXMax);
+            yAxisMinInput.setText("" + newYMin);
+            yAxisMaxInput.setText("" + newYMax);
+            setAxes();
+            mandelbrotWindow.repaint();
+        }
+    }
+
+    public void zoomOut(){
+        System.out.println("boooha");
+
+        double newXMin = (Double.parseDouble(xAxisMinInput.getText()) - zoomX);
+        double newXMax = (Double.parseDouble(xAxisMaxInput.getText()) + zoomX);
+        double newYMin = (Double.parseDouble(yAxisMinInput.getText()) - zoomY);
+        double newYMax = (Double.parseDouble(yAxisMaxInput.getText()) + zoomY);
+
+        if (newXMax + newXMin < 4 && newYMax + newYMin < 3.2) {
+            xAxisMinInput.setText("" + newXMin);
+            System.out.println(xAxisMinInput.getText());
+            xAxisMaxInput.setText("" + newXMax);
+            yAxisMinInput.setText("" + newYMin);
+            yAxisMaxInput.setText("" + newYMax);
+            setAxes();
+            mandelbrotWindow.repaint();
+        }
+    }
+
     @Override
     public void keyTyped(KeyEvent e) {
 
@@ -669,6 +724,11 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         } if (e.getKeyCode() == KeyEvent.VK_DOWN){
             System.out.println("everything that goes up must come down :(");
             moveDown();
+        } if (e.getKeyCode() == KeyEvent.VK_EQUALS){
+            System.out.println("We are going in");
+            zoomIn();
+        } if (e.getKeyCode() == KeyEvent.VK_MINUS){
+            zoomOut();
         }
     }
 
