@@ -9,6 +9,9 @@ import java.awt.geom.Ellipse2D;
  */
 public class JuliaMainFrame extends JFrame implements ActionListener{
 
+    /**
+     * this class creates the frame in which the Julia set is 
+     */
     JuliaWindow juliaWindow;
 
     Container container;
