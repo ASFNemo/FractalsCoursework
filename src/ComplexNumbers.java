@@ -67,7 +67,8 @@ public class ComplexNumbers {
     }
 
     /**
-     * this cubes the complex number that it is being called on.
+     * this cubes the complex number that it is being called on. To do this we square the real numbers and square this
+     * complex numbers imaginary number.
      */
     public void cube(){
         double squareReal = getReal() * getReal();
@@ -103,10 +104,10 @@ public class ComplexNumbers {
         return total;
     }
 
-    public void divide(){
-
-    }
-
+    /**
+     * this class is here to allow
+     * @param complexNumber
+     */
     public void multiply(ComplexNumbers complexNumber){
         this.real = ((getReal()*complexNumber.getReal()) - (getComplex() * complexNumber.getComplex()));
         this.complex =  ((getReal()*complexNumber.getReal()) + (getComplex() * complexNumber.getComplex()));

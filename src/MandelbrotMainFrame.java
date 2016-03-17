@@ -20,7 +20,7 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     ButtonGroup setOption;
     JRadioButton mandelbrot;
     JRadioButton burningShip;
-    JRadioButton z8;
+    JRadioButton z4;
     JRadioButton BOP;
     JRadioButton BSV;
     JRadioButton randomMultibrot;
@@ -32,13 +32,6 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
     JRadioButton fieryRed;
     JRadioButton buriningPink;
     JRadioButton blue;
-
-    ButtonGroup juliaColorOptions;
-    JRadioButton jgreen;
-    JRadioButton jrandom;
-    JRadioButton jfieryRed;
-    JRadioButton jburiningPink;
-    JRadioButton jblue;
 
     boolean zPressed;
 
@@ -137,31 +130,20 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     }
 
+    /**
+     * In this method we are adding everything we need to the main window. I have split everthing needed into different
+     * methods to make it easier to locate anthing that needs to be vied, ammended or deleted.
+     */
     public void addItem(){
         container = getContentPane();
         container.setLayout(null); // change this later to add the bar at the bottom to add the menu  bar
 
-        zPressed = false;
-        mandelbrotWindow = new MandelbrotPanel();
-        mandelbrotWindow.setBackground(Color.WHITE); // may want to make this black/grey at a later point, but try things out
-        mandelbrotWindow.addMouseListener((MouseListener) this);
-        mandelbrotWindow.addMouseMotionListener(this);
-        mandelbrotWindow.setFocusable(true);
-        mandelbrotWindow.requestFocus();
-        mandelbrotWindow.addKeyListener(this);
-        jw = new JuliaWindow();
-        zoomPanel = new ZoomPanel();
-        zoomPanel.setOpaque(false);
-
+        windowStuff();
         fractalOptions();
         fractalInfo();
         fractalButtons();
-        CNtext = new JLabel("This Complex Number:");
-
         juliaSetStuff();
-
         colorOptions();
-        juliaColorOptions();
         elementsToAdd();
         elemetnLayout();
     }
@@ -171,12 +153,18 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     }
 
+    /**
+     * this is what happens when someone clicks on the main fractal panel we take the positon of the click, set the
+     * amount of iteration the programme should do and then we draw the relevant julia set.
+     * @param e the event here is the click of the mouse on the main fractla panel.
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
 
         double x = mandelbrotWindow.getX(e.getX());
         double y = mandelbrotWindow.getY(e.getY());
 
+        jw.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
         drawJulia(x, y);
 
     }
@@ -229,14 +217,14 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
             }
 
             if (yReleased > yPressed) {
-                yAxisMinInput.setText("" + mandelbrotWindow.getY(yReleased));
-                yAxisMaxInput.setText("" + mandelbrotWindow.getY(yPressed));
-                System.out.println("in if 3");
-            } else {
-                yminDist = mandelbrotWindow.getyMin() - xReleased;
-                yMaxDist = mandelbrotWindow.getyMax() - xPressed;
                 yAxisMinInput.setText("" + mandelbrotWindow.getY(yPressed));
                 yAxisMaxInput.setText("" + mandelbrotWindow.getY(yReleased));
+                System.out.println("in if 3");
+            } else {
+                yminDist = mandelbrotWindow.getyMin() - yReleased;
+                yMaxDist = mandelbrotWindow.getyMax() - yPressed;
+                yAxisMinInput.setText("" + mandelbrotWindow.getY(yReleased));
+                yAxisMaxInput.setText("" + mandelbrotWindow.getY(yPressed));
                 System.out.println("in if 4");
             }
 
@@ -265,7 +253,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
 
     /**
-     *
+     * This happens when the user has pressed the left buton on the mouse but has not released the button and is dragging
+     * the mouse across the main fractal panel. We only draw the box and zoom when they have dragged the mouse more than
+     * two pixels to make sure we are not actually just registering a click to bring up the julia set.
      * @param e the event here is the mouse being dragged.
      */
     @Override
@@ -278,15 +268,28 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * this method is used to bring up a live update of the julia set should the user have z pressed. this first checks
+     * if z is pressed. it then registers where the mouse is hovering over, sets the amount of iterations and then draws
+     * the julia set for that point.
+     * @param e the event here is mouse movement over the main fractal panel
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
-        double x = mandelbrotWindow.getX(e.getX());
-        double y = mandelbrotWindow.getY(e.getY());
         if (zPressed) {
+            double x = mandelbrotWindow.getX(e.getX());
+            double y = mandelbrotWindow.getY(e.getY());
+            jw.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
             drawJulia(x, y);
         }
     }
 
+    /**
+     * this method draws the calls the repaint method in the julia set class. but first it sets the text the mandelbrot
+     * values so the user knows the position the julia set they are looking at represents
+     * @param x the real number of the complex number this julia set is representing
+     * @param y the imaginary number of the complex numberthis julia set is representing.
+     */
     public void drawJulia(double x, double y){
         realInput.setText("" + x);
         imaginaryInput.setText("" + y);
@@ -298,6 +301,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         jw.repaint();
     }
 
+    /**
+     * when the programme starts this is called to read through the file that has the saved julia sets. if the file does
+     * does not exist then there is nothing to read and the programe jumps over this step. if there is then the program
+     * goes throught the file line by line splitting it into an array of 3 parts. part one is the assigned name of the
+     * julia set, part to the real number and part 3 the complex number.
+     */
     public void readFavourites(){
 
         String[] juliaSet;
@@ -317,6 +326,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * when save is pressed this method is called to add the julia set being saved into a file. If the name contains a
+     * colon ':' then it is not saved and an error message is shown to the user as I use a colon to seperate betwen
+     * the three parts being saved out so it is easier to read back in.
+     * @return this returns a true or false depending on whether the julia set was successfly saved or not.
+     */
     public boolean savePressed(){
         boolean saved = false;
         String saveName = setNameTextField.getText();
@@ -330,6 +345,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         return saved;
     }
 
+    /**
+     * this method actually writes out to the file and is called by the savePressed method. thsi puts a colon ':'
+     * between the name, the real number and the imaginary number and saves it out to the file. We also assign this julia
+     * set to savedJulia set so it can be added to the JCombBox.
+     * @param saveAs this is the name we want to save the julia set as.
+     */
     public void writeToFile(String saveAs){
 
 
@@ -347,6 +368,11 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
                 Double.parseDouble(jSetYPosInput.getText())), saveAs);
     }
 
+    /**
+     * this is called whenever a user changes there choice of fracrals with the JRadioButton. thsi resets the real (x)
+     * and imaginary (complex) axes. sets the fractal to show and repaints the panel.
+     * @param fractal the name of the fractal that the user wants to draw.
+     */
     public void changeFractal(String fractal){
         mandelbrotWindow.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
         xAxisMinInput.setText("" + -2);
@@ -361,6 +387,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         mandelbrotWindow.repaint();
     }
 
+
+    /**
+     * this is used as a base method for  moving. firstly it gets the
+     * parameters of the real and complex axes, then only if it is withing the original bounds than do we allow the user
+     * to move around
+     */
     public void zoomAndMove(){
         double ixm= Double.parseDouble(xAxisMinInput.getText());
         double ixMa = Double.parseDouble(xAxisMaxInput.getText());
@@ -377,6 +409,10 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     }
 
+    /**
+     * we check that the user has not arrived at the left hand edge of the original fractal. if they have not we
+     * allow them to move left
+     */
     public void moveLeft() {
         double newInput = (Double.parseDouble(xAxisMinInput.getText()) - moveX);
         if (newInput >= -2) {
@@ -384,11 +420,14 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
             xAxisMaxInput.setText("" + (Double.parseDouble(xAxisMaxInput.getText()) - moveX));
             setAxes();
             mandelbrotWindow.repaint();
-        } else{
-            // work out that it works the distancce to the edge bfore making the move and only move the max side
         }
 
     }
+
+    /**
+     * we check that the user has not arrived at the right hand edge of the original fractal. if they have not we
+     * allow them to move left
+     */
     public void moveRight(){
         double newInput = (Double.parseDouble(xAxisMaxInput.getText()) + moveX);
         if (newInput <= 2) {
@@ -399,6 +438,11 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
 
     }
+
+    /**
+     * we check that the user has not arrived at the rupperedge of the original fractal. if they have not we
+     * allow them to move up.
+     */
     public void moveUp(){
         double newInput = (Double.parseDouble(yAxisMaxInput.getText()) + moveY);
         if (newInput <= 1.6) {
@@ -408,6 +452,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
             mandelbrotWindow.repaint();
         }
     }
+
+
+    /**
+     * we check that the user has not arrived at the lower edge of the original fractal. if they have not we
+     * allow them to move down
+     */
     public void moveDown() {
         double newInput = (Double.parseDouble(yAxisMinInput.getText()) - moveY);
         if (newInput >= -1.6) {
@@ -418,8 +468,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * this method does the zooming in. It does this by focusing on a smaller set of axes for the fractal thus making
+     * everything in the panel larger. we do however stop the user from zooming in when it would get to the point where
+     * the fractal would invert and it would start expanding outwards the wrong way round.
+     */
     public void zoomIn(){
-        System.out.println("yaaawww");
 
         double newXMin = (Double.parseDouble(xAxisMinInput.getText()) + zoomX);
         double newXMax = (Double.parseDouble(xAxisMaxInput.getText()) - zoomX);
@@ -431,8 +485,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * this method does the zooming out. It It does this by focusing on a larger set of axes for the fractal thus making
+     * everything in the panel smaller (simulating a zoom out). we do however stop the user from zooming out when they
+     * get back to the original size.
+     */
     public void zoomOut(){
-        System.out.println("boooha");
 
         double newXMin = (Double.parseDouble(xAxisMinInput.getText()) - zoomX);
         double newXMax = (Double.parseDouble(xAxisMaxInput.getText()) + zoomX);
@@ -444,6 +502,13 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * this method sets the axes for the zoom to occur
+     * @param xMin the minimum number for the real number axis
+     * @param xMax the maximum number for the real number axis
+     * @param yMin the minimum number for the imaginary number axis
+     * @param yMax the maximum number for the imaginary number axis
+     */
     public void zoom(double xMin, double xMax, double yMin, double yMax){
         xAxisMinInput.setText("" + xMin);
         System.out.println(xAxisMinInput.getText());
@@ -459,6 +524,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
 
     }
 
+    /**
+     * when a key that does something in our program is pressed then here we send them to the correct place. if it is
+     * 'z' being pressed then we toggle the zPressed boolean to true. if it is a moving or zooming key then we send the
+     * program to the correct method
+     * @param e this is the key that
+     */
     @Override
     public void keyPressed(KeyEvent e) {
 
@@ -493,6 +564,11 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * this is for when the 'z' key is released to turn zPressed back to false so the programme knows to no-longer show
+     * live julia updates.
+     * @param e the key that has been released.
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_Z){
@@ -501,6 +577,26 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         }
     }
 
+    /**
+     * this is adding he information about the panels in this window
+     */
+    public void windowStuff(){
+        zPressed = false;
+        mandelbrotWindow = new MandelbrotPanel();
+        mandelbrotWindow.setBackground(Color.WHITE); // may want to make this black/grey at a later point, but try things out
+        mandelbrotWindow.addMouseListener((MouseListener) this);
+        mandelbrotWindow.addMouseMotionListener(this);
+        mandelbrotWindow.setFocusable(true);
+        mandelbrotWindow.requestFocus();
+        mandelbrotWindow.addKeyListener(this);
+        jw = new JuliaWindow();
+        zoomPanel = new ZoomPanel();
+        zoomPanel.setOpaque(false);
+    }
+
+    /**
+     * this is setting the axes of the complex and real numbers
+     */
     public void setAxes(){
         mandelbrotWindow.setxMin(Double.parseDouble(xAxisMinInput.getText()));
         mandelbrotWindow.setxMax(Double.parseDouble(xAxisMaxInput.getText()));
@@ -508,6 +604,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         mandelbrotWindow.setyMax(Double.parseDouble(yAxisMaxInput.getText()));
     }
 
+    /**
+     * this calls the fractal repaint method after resetting the axes to there oriiginal
+     */
     public void redrawFractal(){
         mandelbrotWindow.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
         xAxisMinInput.setText("" + -2);
@@ -521,6 +620,9 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         mandelbrotWindow.repaint();
     }
 
+    /**
+     * this updatest he fractals based on the real and complex axes that the user has inputed.
+     */
     public void updateFractal(){
         mandelbrotWindow.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
         mandelbrotWindow.setxMin(Double.parseDouble(xAxisMinInput.getText()));
@@ -533,12 +635,15 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         jw.repaint();
     }
 
+    /**
+     * this method simply adds all the elemetns we use in the main window to the window so they are visible to the user.
+     */
     public void elementsToAdd(){
         container.add(zoomPanel);
         container.add(mandelbrotWindow);
         container.add(mandelbrot);
         container.add(burningShip);
-        container.add(z8);
+        container.add(z4);
         container.add(BOP);
         container.add(randomMultibrot);
         container.add(BSV);
@@ -574,20 +679,19 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         container.add(fieryRed);
         container.add(buriningPink);
         container.add(blue);
-        container.add(jgreen);
-        container.add(jrandom);
-        container.add(jfieryRed);
-        container.add(jburiningPink);
-        container.add(jblue);
         container.add(mandelbrotWindow);
     }
 
+    /**
+     * this sets the bounds of all the elements. I decided to use a null layout so i could specify exactly where i want
+     * ecerything ot go. to make sure that it does not get mucked up i set resizable to false.
+     */
     public void elemetnLayout(){
         mandelbrotWindow.setBounds(0, 0, 600, 600);
         zoomPanel.setBounds(0, 0, 600, 600);
         mandelbrot.setBounds(0, 600, 200, 25);
         burningShip.setBounds(0, 625, 200, 25);
-        z8.setBounds(0, 650, 200, 25);
+        z4.setBounds(0, 650, 200, 25);
         BOP.setBounds(200, 600, 200, 25);
         BSV.setBounds(200, 625, 200, 25);
         randomMultibrot.setBounds(200, 650, 200, 25);
@@ -624,7 +728,6 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         fieryRed.setBounds(600, 575, 120, 25);
         buriningPink.setBounds(720, 525, 120, 25);
         blue.setBounds(720, 550, 120, 25);
-        //save.setBounds(675, 525, 250, 25);
     }
 
     public void fractalOptions(){
@@ -634,19 +737,25 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         burningShip = new JRadioButton("Burning Ship");
         burningShip.addActionListener(e -> changeFractal("BurningShip"));
         mandelbrot.setSelected(true);
-        z8 = new JRadioButton("Z^8");
-        z8.addActionListener(e -> changeFractal("z^8"));
+        z4 = new JRadioButton("Quadrabrot");
+        z4.addActionListener(e -> changeFractal("z^4"));
         BOP = new JRadioButton("Bird of Prey");
         BOP.addActionListener(e -> changeFractal("BirdOFPrey"));
         BSV = new JRadioButton("Burning Ship Variant");
         BSV.addActionListener(e -> changeFractal("bsv"));
         randomMultibrot = new JRadioButton("Random Multibrot");
-        randomMultibrot.addActionListener( e -> changeFractal("RandomMultibrot"));
+        randomMultibrot.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                mandelbrotWindow.setLoops();
+                changeFractal("RandomMultibrot");
+            }
+        });
 
 
         setOption.add(mandelbrot);
         setOption.add(burningShip);
-        setOption.add(z8);
+        setOption.add(z4);
         setOption.add(BOP);
         setOption.add(BSV);
         setOption.add(randomMultibrot);
@@ -701,16 +810,12 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         yAxisMinInput = new JTextField("" +  mandelbrotWindow.getyMin());
         yAxisMax = new JLabel("yMax");
         yAxisMaxInput = new JTextField("" + mandelbrotWindow.getyMax());
+        CNtext = new JLabel("This Complex Number:");
     }
 
     public void fractalButtons(){
         redrawMandelbrot = new JButton("redraw Mandelbrot");
-        redrawMandelbrot.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                redrawFractal();
-            }
-        });
+        redrawMandelbrot.addActionListener(e -> redrawFractal());
 
         updateMandelbrot = new JButton("update Mandelbrot");
         updateMandelbrot.addActionListener(e -> updateFractal());
@@ -753,28 +858,6 @@ public class MandelbrotMainFrame extends JFrame implements ActionListener, Mouse
         });
     }
 
-    public void changeJuliaColoring(String coloring){
-        mandelbrotWindow.setColoringAlgorithm(coloring);
-        mandelbrotWindow.repaint();
-    }
 
-    public void juliaColorOptions(){
-        juliaColorOptions = new ButtonGroup();
-        jgreen = new JRadioButton("Green");
-        jgreen.addActionListener(e -> changeColoring("green"));
-        jrandom = new JRadioButton("Random");
-        jrandom.addActionListener(e -> changeColoring("random"));
-        jfieryRed = new JRadioButton("Fiery Red");
-        jfieryRed.addActionListener(e -> changeColoring("red"));
-        jburiningPink = new JRadioButton("Burning Pink");
-        jburiningPink.addActionListener(e -> changeColoring("pink"));
-        jblue = new JRadioButton("blue");
-        jblue.addActionListener(e -> changeColoring("blue"));
 
-        juliaColorOptions.add(green);
-        juliaColorOptions.add(random);
-        juliaColorOptions.add(fieryRed);
-        juliaColorOptions.add(buriningPink);
-        juliaColorOptions.add(blue);
-    }
 }

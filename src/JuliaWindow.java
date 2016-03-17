@@ -1,4 +1,6 @@
 import java.awt.*;
+import java.util.Random;
+
 /**
  * This class is created to do the window calculations of the Julia set and work out where to put each pixel and what
  * color to set it.
@@ -38,8 +40,12 @@ public class JuliaWindow extends Canvas{
 
         mandelbrotx = x;
         mandelbrotY = y;
+
     }
 
+    /**
+     * @param complexNumber ths complex number used to form the julia set
+     */
     public JuliaWindow(ComplexNumbers complexNumber){
         size = 600;
         iterationsToComplete = 500;
@@ -50,8 +56,13 @@ public class JuliaWindow extends Canvas{
         yMax = 1.6;
 
         this.complexJuliaNumber = complexNumber;
+
+
     }
 
+    /**
+     * just a generic julia set
+     */
     public JuliaWindow(){
         size = 600;
         iterationsToComplete = 500;
@@ -60,6 +71,7 @@ public class JuliaWindow extends Canvas{
         yMin = -1.6;
         xMin = -2;
         yMax = 1.6;
+
 
     }
 
@@ -94,11 +106,12 @@ public class JuliaWindow extends Canvas{
                 double[] infoArray = amountOfIterations(new ComplexNumbers(getY(i), getX(j)));
                 int totalIterations = (int) infoArray[1];
 
-//                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new Color(180,
-//                        (totalIterations*2)%254, 0));
+                float saturation = 1f;
+                float brightness = totalIterations < iterationsToComplete ? 1f : 0;
+                float hue =  (totalIterations%256)/255.0f;
+                Color color = Color.getHSBColor((float) hue, saturation, brightness);
+                g.setColor(color);
 
-                g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
-                        Color(200/(2*totalIterations +1), (totalIterations*2)%180, 180/(2*totalIterations +1)));
                 g.drawLine(i, j, i, j);
             }
         }
@@ -147,9 +160,7 @@ public class JuliaWindow extends Canvas{
         double y = (((double) realY)/(this.getHeight()));
         y = y * (yMax - yMin);
         y = y + yMin;
-        //setFractalY(y);
         return y;
-        //return (3.2*realY)/windowSiza;
     }
 
     public double getdY(double realY){
@@ -203,6 +214,7 @@ public class JuliaWindow extends Canvas{
     public String getJuliaName() {
         return juliaName;
     }
+
 }
 
 

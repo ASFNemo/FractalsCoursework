@@ -19,6 +19,7 @@ public class MandelbrotPanel extends JPanel {
     double yMax;
 
 
+    int loops;
 
 
     //String FractalToDraw
@@ -127,16 +128,22 @@ public class MandelbrotPanel extends JPanel {
                     cNumber.cube();
                     cNumber.add(complexNumber);
                     break;
-                case "z^8":
+                case "z^4":
                     cNumber.square();
                     cNumber.square();
                     //cNumber.square();
 
-                    //cNumber.add(complexNumber);
+                    cNumber.add(complexNumber);
                     break;
                 case "bsv":
                     cNumber.cube();
                     cNumber.makePositive();
+                    cNumber.add(complexNumber);
+                    break;
+                case "RandomMultibrot":
+                    for (int i = 0; i < loops; i++){
+                        cNumber.square();
+                    }
                     cNumber.add(complexNumber);
                     break;
             }
@@ -227,5 +234,11 @@ public class MandelbrotPanel extends JPanel {
 
     public void setColoringAlgorithm(String coloringAlgorithm) {
         this.coloringAlgorithm = coloringAlgorithm;
+    }
+
+    public void setLoops(){
+        Random rn = new Random();
+        this.loops = rn.nextInt(8) + 1;
+        System.out.println("amount of loops: " + this.loops);
     }
 }
