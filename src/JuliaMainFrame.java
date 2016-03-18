@@ -10,7 +10,7 @@ import java.awt.geom.Ellipse2D;
 public class JuliaMainFrame extends JFrame implements ActionListener{
 
     /**
-     * this class creates the frame in which the Julia set is 
+     * this class creates the frame in which the Julia set is
      */
     JuliaWindow juliaWindow;
 
@@ -37,8 +37,8 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
 
         //juliaWindow = new JuliaWindow(complexNumber, x, y);
 
-        //this.add(mandelbrotWindow);
-        //this.add(new MandelbrotPanel());
+        //this.add(fractalPanel);
+        //this.add(new FractalPanel());
         setResizable(false);
         frameItem();
     }
@@ -55,8 +55,8 @@ public class JuliaMainFrame extends JFrame implements ActionListener{
 
         juliaWindow = new JuliaWindow(x, y);
 
-        //this.add(mandelbrotWindow);
-        //this.add(new MandelbrotPanel());
+        //this.add(fractalPanel);
+        //this.add(new FractalPanel());
         setResizable(false);
         frameItem();
     }

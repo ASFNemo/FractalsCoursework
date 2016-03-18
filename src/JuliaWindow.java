@@ -75,6 +75,12 @@ public class JuliaWindow extends Canvas{
 
     }
 
+    /**
+     * this is here in case the programme is to be expanded and extra functionality is to be added.
+     * @param jName
+     * @param x
+     * @param y
+     */
     public JuliaWindow(String jName, double x, double y){
         size = 600;
         iterationsToComplete = 500;
@@ -147,15 +153,29 @@ public class JuliaWindow extends Canvas{
 
     }
 
-
-
+    /**
+     * this allows the user to set the amount of iteratiosn they want to complete for each point in the julia set to
+     * check if it diverges
+     * @param iterationsToComplete the number of iterations each coordinate should complete
+     */
     public void setIterationsToComplete(int iterationsToComplete) {
         this.iterationsToComplete = iterationsToComplete;
     }
+
+    /**
+     * @return the number of iterations each coordinate of the julia set should complete.
+     */
     public int getIterationsToComplete() {
         return iterationsToComplete;
     }
 
+    /**
+     * here we are trying to plot the y coordinate on the maginary plane so we take the real y and divide it by the
+     * height of the panel. then we mutiply it by the maximum*minimum of the y plane (in our  case 1.6 - (-1.6))  and
+     * finaly we add ymin to it.
+     * @param realY the y coordinate on the real axis
+     * @return the coordinates on the imaginary Axis on the complex plane
+     */
     public double getY(double realY){
         double y = (((double) realY)/(this.getHeight()));
         y = y * (yMax - yMin);
@@ -163,38 +183,26 @@ public class JuliaWindow extends Canvas{
         return y;
     }
 
-    public double getdY(double realY){
-        double y = (((double) realY)/(600));
-        y = y * (yMax - yMin);
-        y = y + yMin;
-        //setFractalY(y);
-        return y;
-        //return (3.2*realY)/windowSiza;
-    }
 
-
+    /**
+     * here we are trying to plot the x coordinate on the real axis so we take the real x and divide it by the
+     * width of the panel. then we mutiply it by the maximum*minimum of the x plane (in our  case 2 - (-2)  and
+     * finaly we add xmin to it to it.
+     * @param realX the x coordinate on teh real axis
+     * @return the coordinates on the real axis of the complex plane
+     */
     public double getX(double realX){
 
         double x = (realX)/(this.getWidth());
         x = x * (xMax - xMin);
         x = x + xMin;
-
-        //setFractalX(x);
-
-        return x;
-        //return (4*realX)/windowSiza;
-    }
-
-
-    public double getdX(double realX){
-
-        double x = (realX)/(600);
-        x = x * (xMax - xMin);
-        x = x + xMin;
-
         return x;
     }
 
+
+    /**
+     * @return the current mandelbrot set
+     */
     public double getMandelbrotx() {
         return mandelbrotx;
     }

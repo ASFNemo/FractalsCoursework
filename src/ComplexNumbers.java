@@ -84,7 +84,7 @@ public class ComplexNumbers {
     public void makePositive(){
         this.real = Math.abs(this.real);
         this.complex = Math.abs(this.complex);
-        this.complex = -this.complex; //change this as i think it is flipping the fractal everytime we zoom
+        this.complex = this.complex; //change this as i think it is flipping the fractal everytime we zoom
     }
 
 

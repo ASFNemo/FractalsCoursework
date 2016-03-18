@@ -5,12 +5,13 @@ import java.util.Random;
 /**
  * Created by asherfischbaum on 02/03/2016.
  */
-public class MandelbrotPanel extends JPanel {
+public class FractalPanel extends JPanel {
 
     int windowSiza;
     int iterationsToComplete;
 
     String fractalToShow;
+    String typeToShow;
     String coloringAlgorithm;
 
     double xMax;
@@ -18,6 +19,7 @@ public class MandelbrotPanel extends JPanel {
     double xMin;
     double yMax;
 
+    boolean draw = false;
 
     int loops;
 
@@ -28,12 +30,13 @@ public class MandelbrotPanel extends JPanel {
     double fractalY;
 
 
-    public MandelbrotPanel() {
+    public FractalPanel() {
         windowSiza = 600; // check if we can make the same
         iterationsToComplete = 100; // check if we can make the same
 
         fractalToShow = "Mandelbrot";
         coloringAlgorithm = "green";
+        typeToShow = "fractal";
         //complexNumberSet = new ComplexNumbers[windowSiza][windowSiza];
 
         xMax = 2;
@@ -51,14 +54,14 @@ public class MandelbrotPanel extends JPanel {
                 for (int j = 0; j < windowSiza; j++) {
 
 
-                    double[] infoArray = amountOfMAndelbrotIterations(new ComplexNumbers(getX(i), getY(j)));
-                    int totalIterations = (int) infoArray[1];
+//                    double[] infoArray =
+                    int totalIterations = amountOfMAndelbrotIterations(new ComplexNumbers(getX(i), getY(j)));
 
                     switch (coloringAlgorithm){
                         case ("green"):
                             g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
-                                    Color(180 / (2 * totalIterations), (totalIterations * 2) % 254,
-                                    180/ (2 * totalIterations)));
+                                    Color(180 / (2 * totalIterations +1), (totalIterations * 2) % 254,
+                                    180/ (2 * totalIterations +1)));
                             break;
                         case ("random"):
                             g.setColor(new Color(
@@ -103,15 +106,18 @@ public class MandelbrotPanel extends JPanel {
 
 
 
-    protected double[] amountOfMAndelbrotIterations(ComplexNumbers complexNumber) {
+    protected int amountOfMAndelbrotIterations(ComplexNumbers complexNumber) {
         ComplexNumbers cNumber = new ComplexNumbers();
-        double totalIterations = 0;
+        int totalIterations = 0;
         double[] infoArray = new  double[2];
         while ((totalIterations < getIterationsToComplete()) && cNumber.modulusSquared() < 4) {
             totalIterations++;
 
             switch (fractalToShow){
                 case "Mandelbrot":
+                    switch (typeToShow){
+                        
+                    }
                     cNumber.square();
                     cNumber.add(complexNumber);
                     break;
@@ -128,17 +134,47 @@ public class MandelbrotPanel extends JPanel {
                     cNumber.cube();
                     cNumber.add(complexNumber);
                     break;
+                // Rename this as porbit trap
                 case "z^4":
-                    cNumber.square();
-                    cNumber.square();
-                    //cNumber.square();
 
+                    cNumber.square();
                     cNumber.add(complexNumber);
+
+                    if (Math.abs(cNumber.getReal()) < 0.01) {
+                        return totalIterations;
+
+                    }
+
+                    if (Math.abs(cNumber.getComplex()) < 0.01) {
+                        return totalIterations;
+
+                    }
+
+//                    cNumber.square();
+//                    cNumber.square();
+//                    //cNumber.square();
+//
+//                    cNumber.add(complexNumber);
                     break;
+                // Region Split - RENAME THIS!!
                 case "bsv":
-                    cNumber.cube();
-                    cNumber.makePositive();
+//                    cNumber.cube();
+//                    cNumber.makePositive();
+//                    cNumber.add(complexNumber);
+
+                    cNumber.square();
                     cNumber.add(complexNumber);
+
+                    if (Math.abs(cNumber.getReal()) < 0.01) {
+                        return (totalIterations%5)*(iterationsToComplete/5);
+
+                    }
+
+                    if (Math.abs(cNumber.getComplex()) < 0.01) {
+                        return (totalIterations%5)*(iterationsToComplete/5);
+
+                    }
+
                     break;
                 case "RandomMultibrot":
                     for (int i = 0; i < loops; i++){
@@ -151,11 +187,9 @@ public class MandelbrotPanel extends JPanel {
 
         }
 
-        infoArray[0] = cNumber.modulusSquared();
-        infoArray[1] = totalIterations;
 
 
-        return infoArray;
+        return totalIterations;
     }
 
 

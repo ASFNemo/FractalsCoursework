@@ -6,7 +6,7 @@ import javax.swing.*;
 public class StartMandelbrot {
 
     public static void main(String[] args) {
-        JFrame frame = new MandelbrotMainFrame();
+        JFrame frame = new FractalMainFrame();
 
         //JFrame frame = new JuliaMainFrame();
 
