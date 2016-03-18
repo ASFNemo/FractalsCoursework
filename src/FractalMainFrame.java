@@ -17,6 +17,8 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
 
     Container container;
 
+    ButtonGroup panelOption;
+
     ButtonGroup setOption;
     JRadioButton mandelbrot;
     JRadioButton burningShip;
@@ -25,6 +27,21 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
     JRadioButton BSV;
     JRadioButton randomMultibrot;
 
+    ButtonGroup orbitTraps;
+    JRadioButton OTMandelbrot;
+    JRadioButton OTburningShip;
+    JRadioButton OTz4;
+    JRadioButton OTBOP;
+    JRadioButton OTBSV;
+    JRadioButton OTrandomMultibrot;
+
+    ButtonGroup regionSplit;
+    JRadioButton RSmandelbrot;
+    JRadioButton RSburningShip;
+    JRadioButton RSz4;
+    JRadioButton RSBOP;
+    JRadioButton RSBSV;
+    JRadioButton RSrandomMultibrot;
 
     ButtonGroup colorOptions;
     JRadioButton green;
@@ -32,6 +49,8 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
     JRadioButton fieryRed;
     JRadioButton buriningPink;
     JRadioButton blue;
+
+
 
     boolean zPressed;
 
@@ -140,6 +159,8 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
 
         windowStuff();
         fractalOptions();
+        regionSplitOptions();
+        orbitTrapsOptions();
         fractalInfo();
         fractalButtons();
         juliaSetStuff();
@@ -166,6 +187,7 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
 
         jw.setIterationsToComplete(Integer.parseInt(inputIterations.getText()));
         drawJulia(x, y);
+        fractalPanel.requestFocus();
 
         // check if you can make the focus on the panel
     }
@@ -649,6 +671,18 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
         container.add(BOP);
         container.add(randomMultibrot);
         container.add(BSV);
+        container.add(OTMandelbrot);
+        container.add(OTburningShip);
+        container.add(OTz4);
+        container.add(OTBOP);
+        container.add(OTrandomMultibrot);
+        container.add(OTBSV);
+        container.add(RSmandelbrot);
+        container.add(RSburningShip);
+        container.add(RSz4);
+        container.add(RSBOP);
+        container.add(RSrandomMultibrot);
+        container.add(RSBSV);
         container.add(redrawMandelbrot);
         container.add(updateMandelbrot);
         container.add(iterationsText);
@@ -691,29 +725,41 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
     public void elemetnLayout(){
         fractalPanel.setBounds(0, 0, 600, 600);
         zoomPanel.setBounds(0, 0, 600, 600);
-        mandelbrot.setBounds(0, 600, 200, 25);
-        burningShip.setBounds(0, 625, 200, 25);
-        z4.setBounds(0, 650, 200, 25);
-        BOP.setBounds(200, 600, 200, 25);
-        BSV.setBounds(200, 625, 200, 25);
-        randomMultibrot.setBounds(200, 650, 200, 25);
-        iterationsText.setBounds(375, 600, 150, 25);
-        inputIterations.setBounds(525, 600, 50, 25);
-        xAxisMin.setBounds(375, 625, 50, 25);
-        xAxisMinInput.setBounds(425, 625, 75, 25);
-        xAxisMax.setBounds(500, 625, 50, 25);
-        xAxisMaxInput.setBounds(550, 625, 75, 25);
-        yAxisMin.setBounds(375, 650, 50, 25);
-        yAxisMinInput.setBounds(425, 650, 75, 25);
-        yAxisMax.setBounds(500, 650, 50, 25);
-        yAxisMaxInput.setBounds(550, 650, 75, 25);
+        mandelbrot.setBounds(50, 600, 150, 25);
+        burningShip.setBounds(50, 625, 150, 25);
+        z4.setBounds(50, 650, 175, 25);
+        BOP.setBounds(250, 600, 175, 25);
+        BSV.setBounds(250, 625, 175, 25);
+        randomMultibrot.setBounds(250, 650, 150, 25);
+        OTMandelbrot.setBounds(0, 600, 25, 25);
+        OTburningShip.setBounds(0, 625, 25, 25);
+        OTz4.setBounds(0, 650, 25, 25);
+        OTBOP.setBounds(200, 600, 25, 25);
+        OTBSV.setBounds(200, 625, 25, 25);
+        OTrandomMultibrot.setBounds(200, 650, 25, 25);
+        RSmandelbrot.setBounds(25, 600, 25, 25);
+        RSburningShip.setBounds(25, 625, 25, 25);
+        RSz4.setBounds(25, 650, 25, 25);
+        RSBOP.setBounds(225, 600, 25, 25);
+        RSBSV.setBounds(225, 625, 25, 25);
+        RSrandomMultibrot.setBounds(225, 650, 25, 25);
+        iterationsText.setBounds(425, 600, 150, 25);
+        inputIterations.setBounds(575, 600, 50, 25);
+        xAxisMin.setBounds(425, 625, 50, 25);
+        xAxisMinInput.setBounds(475, 625, 75, 25);
+        xAxisMax.setBounds(550, 625, 50, 25);
+        xAxisMaxInput.setBounds(600, 625, 75, 25);
+        yAxisMin.setBounds(425, 650, 50, 25);
+        yAxisMinInput.setBounds(475, 650, 75, 25);
+        yAxisMax.setBounds(550, 650, 50, 25);
+        yAxisMaxInput.setBounds(600, 650, 75, 25);
         CNtext.setBounds(775, 600, 200, 25);
-        realLabel.setBounds(625, 625, 150, 25);
+        realLabel.setBounds(675, 625, 100, 25);
         realInput.setBounds(775, 625, 200, 25);
-        imaginaryLabel.setBounds(625, 650, 150, 25);
+        imaginaryLabel.setBounds(675, 650, 100, 25);
         imaginaryInput.setBounds(775, 650, 200, 25);
-        redrawMandelbrot.setBounds(380, 675, 200, 25);
-        updateMandelbrot.setBounds(620, 675, 200, 25);
+        redrawMandelbrot.setBounds(505, 675, 200, 25);
+        updateMandelbrot.setBounds(695, 675, 200, 25);
         jw.setBounds(600, 0, 400, 400);
         juliaOptions.setBounds(600, 400, 150, 25);
         showJulia.setBounds(750, 400, 140, 25);
@@ -740,18 +786,34 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
     public void fractalOptions(){
         setOption = new ButtonGroup();
         mandelbrot = new JRadioButton("Mandelbrot");
-        mandelbrot.addActionListener(e -> changeFractal("Mandelbrot"));
+        mandelbrot.addActionListener(e -> {
+            fractalPanel.setTypeToShow("fractal");
+            changeFractal("Mandelbrot");
+        });
         burningShip = new JRadioButton("Burning Ship");
-        burningShip.addActionListener(e -> changeFractal("BurningShip"));
+        burningShip.addActionListener(e -> {
+            fractalPanel.setTypeToShow("fractal");
+            changeFractal("BurningShip");
+        });
         mandelbrot.setSelected(true);
         z4 = new JRadioButton("Quadrabrot");
-        z4.addActionListener(e -> changeFractal("z^4"));
+        z4.addActionListener(e -> {
+            fractalPanel.setTypeToShow("fractal");
+            changeFractal("z^4");
+        });
         BOP = new JRadioButton("Bird of Prey");
-        BOP.addActionListener(e -> changeFractal("BirdOFPrey"));
+        BOP.addActionListener(e -> {
+            fractalPanel.setTypeToShow("fractal");
+            changeFractal("BirdOFPrey");
+        });
         BSV = new JRadioButton("Burning Ship Variant");
-        BSV.addActionListener(e -> changeFractal("bsv"));
+        BSV.addActionListener(e -> {
+            fractalPanel.setTypeToShow("fractal");
+            changeFractal("bsv");
+        });
         randomMultibrot = new JRadioButton("Random Multibrot");
         randomMultibrot.addActionListener(e -> {
+            fractalPanel.setTypeToShow("fractal");
             fractalPanel.setLoops();
             changeFractal("RandomMultibrot");
         });
@@ -764,6 +826,116 @@ public class FractalMainFrame extends JFrame implements ActionListener, MouseLis
         setOption.add(BSV);
         setOption.add(randomMultibrot);
 
+    }
+
+    public void regionSplitOptions(){
+
+        regionSplit = new ButtonGroup();
+        RSmandelbrot = new JRadioButton("Mandelbrot");
+        RSmandelbrot.addActionListener(e -> {
+            fractalPanel.setTypeToShow("regionSplit");
+            changeFractal("Mandelbrot");
+        });
+        RSburningShip = new JRadioButton("Burning Ship");
+        RSburningShip.addActionListener(e -> {
+            fractalPanel.setTypeToShow("regionSplit");
+            changeFractal("BurningShip");
+        });
+        RSz4 = new JRadioButton("Quadrabrot");
+        RSz4.addActionListener(e -> {
+            fractalPanel.setTypeToShow("regionSplit");
+            changeFractal("z^4");
+        });
+        RSBOP = new JRadioButton("Bird of Prey");
+        RSBOP.addActionListener(e -> {
+            fractalPanel.setTypeToShow("regionSplit");
+            changeFractal("BirdOFPrey");
+        });
+        RSBSV = new JRadioButton("Burning Ship Variant");
+        RSBSV.addActionListener(e -> {
+            fractalPanel.setTypeToShow("regionSplit");
+            changeFractal("bsv");
+        });
+        RSrandomMultibrot = new JRadioButton("Random Multibrot");
+        RSrandomMultibrot.addActionListener(e -> {
+            fractalPanel.setTypeToShow("regionSplit");
+            fractalPanel.setLoops();
+            changeFractal("RandomMultibrot");
+        });
+
+
+        regionSplit.add(RSmandelbrot);
+        regionSplit.add(RSburningShip);
+        regionSplit.add(RSz4);
+        regionSplit.add(RSBOP);
+        regionSplit.add(RSBSV);
+        regionSplit.add(RSrandomMultibrot);
+
+    }
+
+    public void orbitTrapsOptions(){
+        orbitTraps = new ButtonGroup();
+        OTMandelbrot = new JRadioButton("Mandelbrot");
+        OTMandelbrot.addActionListener(e -> {
+            fractalPanel.setTypeToShow("orbitTrap");
+            changeFractal("Mandelbrot");
+        });
+        OTburningShip = new JRadioButton("Burning Ship");
+        OTburningShip.addActionListener(e -> {
+            fractalPanel.setTypeToShow("orbitTrap");
+            changeFractal("BurningShip");
+        });
+        OTz4 = new JRadioButton("Quadrabrot");
+        OTz4.addActionListener(e -> {
+            fractalPanel.setTypeToShow("orbitTrap");
+            changeFractal("z^4");
+        });
+        OTBOP = new JRadioButton("Bird of Prey");
+        OTBOP.addActionListener(e -> {
+            fractalPanel.setTypeToShow("orbitTrap");
+            changeFractal("BirdOFPrey");
+        });
+        OTBSV = new JRadioButton("Burning Ship Variant");
+        OTBSV.addActionListener(e -> {
+            fractalPanel.setTypeToShow("orbitTrap");
+            changeFractal("bsv");
+        });
+        OTrandomMultibrot = new JRadioButton("Random Multibrot");
+        OTrandomMultibrot.addActionListener(e -> {
+            fractalPanel.setTypeToShow("orbitTrap");
+            fractalPanel.setLoops();
+            changeFractal("RandomMultibrot");
+        });
+
+
+        orbitTraps.add(OTMandelbrot);
+        orbitTraps.add(OTburningShip);
+        orbitTraps.add(OTz4);
+        orbitTraps.add(OTBOP);
+        orbitTraps.add(OTBSV);
+        orbitTraps.add(OTrandomMultibrot);
+
+
+        panelOption = new ButtonGroup();
+
+        panelOption.add(OTMandelbrot);
+        panelOption.add(OTburningShip);
+        panelOption.add(OTz4);
+        panelOption.add(OTBOP);
+        panelOption.add(OTBSV);
+        panelOption.add(OTrandomMultibrot);
+        panelOption.add(RSmandelbrot);
+        panelOption.add(RSburningShip);
+        panelOption.add(RSz4);
+        panelOption.add(RSBOP);
+        panelOption.add(RSBSV);
+        panelOption.add(RSrandomMultibrot);
+        panelOption.add(mandelbrot);
+        panelOption.add(burningShip);
+        panelOption.add(z4);
+        panelOption.add(BOP);
+        panelOption.add(BSV);
+        panelOption.add(randomMultibrot);
     }
 
     /**

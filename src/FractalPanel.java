@@ -36,7 +36,7 @@ public class FractalPanel extends JPanel {
 
         fractalToShow = "Mandelbrot";
         coloringAlgorithm = "green";
-        typeToShow = "fractal";
+        typeToShow = "orbitTrap";
         //complexNumberSet = new ComplexNumbers[windowSiza][windowSiza];
 
         xMax = 2;
@@ -64,11 +64,16 @@ public class FractalPanel extends JPanel {
                                     180/ (2 * totalIterations +1)));
                             break;
                         case ("random"):
-                            g.setColor(new Color(
-                                    (new Random()).nextInt(255/(iterationsToComplete / totalIterations)),
-                                    (new Random()).nextInt(255/(iterationsToComplete / totalIterations)),
-                                    (new Random()).nextInt(255/(iterationsToComplete / totalIterations))
-                            ));
+                            /// CHANGE NAME TO BLACK AND WHITE
+//                            g.setColor(new Color(
+//                                    (new Random()).nextInt(255/(iterationsToComplete / totalIterations)),
+//                                    (new Random()).nextInt(255/(iterationsToComplete / totalIterations)),
+//                                    (new Random()).nextInt(255/(iterationsToComplete / totalIterations))
+//                            ));
+//                            g.setColor((totalIterations ==getIterationsToComplete()) ? Color.BLACK :new Color((2*255)/(totalIterations + 3), (2*255)/(totalIterations + 3), (2*255)/(totalIterations + 3)));
+
+                            g.setColor((totalIterations == getIterationsToComplete()) ? Color.BLACK : new
+                                    Color(180 / (totalIterations+1), 220/ (totalIterations+1), 180/ (5 * (iterationsToComplete/totalIterations+1))));
                             break;
                         case ("red"):
                             float saturation = 1f;
@@ -97,7 +102,7 @@ public class FractalPanel extends JPanel {
 
 
 
-      //              g.setColor((totalIterations ==getIterationsToComplete()) ? Color.BLACK :new Color((2*255)/(totalIterations + 3), (2*255)/(totalIterations + 3), (2*255)/(totalIterations + 3)));
+//                    g.setColor((totalIterations ==getIterationsToComplete()) ? Color.BLACK :new Color((2*255)/(totalIterations + 3), (2*255)/(totalIterations + 3), (2*255)/(totalIterations + 3)));
                     g.drawLine(i, j, i, j);
                 }
             }
@@ -115,40 +120,140 @@ public class FractalPanel extends JPanel {
 
             switch (fractalToShow){
                 case "Mandelbrot":
-                    switch (typeToShow){
-                        
-                    }
                     cNumber.square();
                     cNumber.add(complexNumber);
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
+                    }
+
                     break;
                 case "BurningShip":
                     cNumber.square();
                     cNumber.add(complexNumber);
                     cNumber.makePositive();
+
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
+                    }
                     break;
                 case "NewtonsFractal":
                     cNumber.add(cNumber);
                     cNumber.add(new ComplexNumbers(1, 0));
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
+                    }
                     break;
                 case "BirdOFPrey":
                     cNumber.cube();
                     cNumber.add(complexNumber);
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
+                    }
                     break;
                 // Rename this as porbit trap
                 case "z^4":
 
                     cNumber.square();
+                    cNumber.square();
                     cNumber.add(complexNumber);
 
-                    if (Math.abs(cNumber.getReal()) < 0.01) {
-                        return totalIterations;
-
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
                     }
-
-                    if (Math.abs(cNumber.getComplex()) < 0.01) {
-                        return totalIterations;
-
-                    }
+//                    if (Math.abs(cNumber.getReal()) < 0.01) {
+//                        return totalIterations;
+//
+//                    }
+//
+//                    if (Math.abs(cNumber.getComplex()) < 0.01) {
+//                        return totalIterations;
+//
+//                    }
 
 //                    cNumber.square();
 //                    cNumber.square();
@@ -158,22 +263,41 @@ public class FractalPanel extends JPanel {
                     break;
                 // Region Split - RENAME THIS!!
                 case "bsv":
-//                    cNumber.cube();
-//                    cNumber.makePositive();
-//                    cNumber.add(complexNumber);
-
-                    cNumber.square();
+                    cNumber.cube();
+                    cNumber.makePositive();
                     cNumber.add(complexNumber);
 
-                    if (Math.abs(cNumber.getReal()) < 0.01) {
-                        return (totalIterations%5)*(iterationsToComplete/5);
-
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
                     }
 
-                    if (Math.abs(cNumber.getComplex()) < 0.01) {
-                        return (totalIterations%5)*(iterationsToComplete/5);
 
-                    }
+//                    if (Math.abs(cNumber.getReal()) < 0.01) {
+//                        return (totalIterations%5)*(iterationsToComplete/5);
+//
+//                    }
+//
+//                    if (Math.abs(cNumber.getComplex()) < 0.01) {
+//                        return (totalIterations%5)*(iterationsToComplete/5);
+//
+//                    }
 
                     break;
                 case "RandomMultibrot":
@@ -181,6 +305,26 @@ public class FractalPanel extends JPanel {
                         cNumber.square();
                     }
                     cNumber.add(complexNumber);
+                    switch (typeToShow){
+                        case "fractal":
+                            break;
+                        case "orbitTrap":
+                            if (Math.abs(cNumber.getReal()) < 0.02) {
+                                return totalIterations;
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.02) {
+                                return totalIterations;
+                            }
+                            break;
+                        case "regionSplit":
+                            if (Math.abs(cNumber.getReal()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            if (Math.abs(cNumber.getComplex()) < 0.01) {
+                                return (totalIterations%5)*(iterationsToComplete/5);
+                            }
+                            break;
+                    }
                     break;
             }
 
@@ -274,5 +418,13 @@ public class FractalPanel extends JPanel {
         Random rn = new Random();
         this.loops = rn.nextInt(8) + 1;
         System.out.println("amount of loops: " + this.loops);
+    }
+
+    public String getTypeToShow() {
+        return typeToShow;
+    }
+
+    public void setTypeToShow(String typeToShow) {
+        this.typeToShow = typeToShow;
     }
 }
